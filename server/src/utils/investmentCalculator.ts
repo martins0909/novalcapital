@@ -49,7 +49,7 @@ export const updateInvestmentValues = async () => {
       where: { status: 'active' },
     });
 
-    const updatePromises = activeInvestments.map(async (investment) => {
+    const updatePromises = activeInvestments.map(async (investment: any) => {
       const growth = calculateInvestmentGrowth(investment);
       
       return prisma.investment.update({

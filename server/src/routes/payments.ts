@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // User: Create payment and transaction
-router.post('/user/create', upload.single('receipt'), async (req, res) => {
+router.post('/user/create', upload.single('receipt'), async (req: Request, res: Response) => {
   try {
     const { userId, amount, currency, method, transactionId, date } = req.body;
     let receiptUrl = '';
@@ -57,7 +57,7 @@ router.post('/user/create', upload.single('receipt'), async (req, res) => {
 });
 
 // Admin: Get all payments
-router.get('/admin/all', authMiddleware, async (req, res) => {
+router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const payments = await Payment.find({}).populate('userId');
@@ -68,7 +68,7 @@ router.get('/admin/all', authMiddleware, async (req, res) => {
 });
 
 // Admin: Confirm payment
-router.post('/admin/:id/confirm', authMiddleware, async (req, res) => {
+router.post('/admin/:id/confirm', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
@@ -87,7 +87,7 @@ router.post('/admin/:id/confirm', authMiddleware, async (req, res) => {
 });
 
 // Admin: Reject payment
-router.post('/admin/:id/reject', authMiddleware, async (req, res) => {
+router.post('/admin/:id/reject', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;

@@ -27,7 +27,7 @@ function computeChange(current: number, previous: number) {
   return { changePercent, trend };
 }
 
-router.get('/ticker', async (req, res) => {
+router.get('/ticker', async (req: Request, res: Response) => {
   try {
     const symbolsParam = (req.query.symbols as string) || 'GBPUSD,EURUSD,USDJPY,USDCAD,USDCHF,XAUUSD';
     const symbols = symbolsParam.split(',').map(s => s.trim().toUpperCase());

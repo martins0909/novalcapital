@@ -10,9 +10,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret') as any;
-    (req as any).userId = decoded.userId;
-    (req as any).email = decoded.email;
-    (req as any).role = decoded.role;
+    req.userId = decoded.userId;
+    req.email = decoded.email;
+    req.role = decoded.role;
 
     next();
   } catch (error) {

@@ -6,7 +6,7 @@ import { authMiddleware } from '../middleware/auth';
 const router = Router();
 
 // Get all transactions for a user
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { type, status, limit = 50 } = req.query;
@@ -21,7 +21,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Get transaction by ID
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { id } = req.params;
@@ -34,7 +34,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // Create manual transaction (deposit)
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { type, amount, description } = req.body;
@@ -60,7 +60,7 @@ router.post('/', authMiddleware, async (req, res) => {
 
 export default router;
 // Admin: Get all transactions
-router.get('/admin/all', authMiddleware, async (req, res) => {
+router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const txs = await Transaction.find({}).populate('userId');
@@ -71,7 +71,7 @@ router.get('/admin/all', authMiddleware, async (req, res) => {
 });
 
 // Admin: Approve transaction
-router.post('/admin/:id/approve', authMiddleware, async (req, res) => {
+router.post('/admin/:id/approve', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
@@ -83,7 +83,7 @@ router.post('/admin/:id/approve', authMiddleware, async (req, res) => {
 });
 
 // Admin: Reject transaction
-router.post('/admin/:id/reject', authMiddleware, async (req, res) => {
+router.post('/admin/:id/reject', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;

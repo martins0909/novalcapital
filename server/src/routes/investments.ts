@@ -6,7 +6,7 @@ import { authMiddleware } from '../middleware/auth';
 const router = Router();
 
 // Get all investments for a user
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const investments = await Investment.find({ userId }).sort({ createdAt: -1 });
@@ -17,7 +17,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Create new investment
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { planName, planType, investedAmount, duration, roi } = req.body;
@@ -45,7 +45,7 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 // Get investment by ID
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { id } = req.params;
@@ -58,7 +58,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // Update investment (for profit updates)
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { id } = req.params;
@@ -76,7 +76,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 });
 
 // Withdraw from investment
-router.post('/:id/withdraw', authMiddleware, async (req, res) => {
+router.post('/:id/withdraw', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { id } = req.params;
@@ -110,25 +110,25 @@ router.post('/:id/withdraw', authMiddleware, async (req, res) => {
 
 export default router;
 // Admin: Get all investments
-router.get('/admin/all', authMiddleware, async (req, res) => {
-  if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
-  try {
-    const investments = await Investment.find({}).populate('userId');
-    res.json(investments);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch investments' });
-  }
+router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => {
+    if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
+    try {
+      const investments = await Investment.find({}).populate('userId');
+      res.json(investments);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch investments' });
+    }
 });
 
 // Admin: Update investment status
-router.put('/admin/:id/status', authMiddleware, async (req, res) => {
-  if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-    const investment = await Investment.findByIdAndUpdate(id, { status }, { new: true });
-    res.json(investment);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to update investment status' });
-  }
+router.put('/admin/:id/status', authMiddleware, async (req: Request, res: Response) => {
+    if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      const investment = await Investment.findByIdAndUpdate(id, { status }, { new: true });
+      res.json(investment);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to update investment status' });
+    }
 });

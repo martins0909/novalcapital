@@ -5,7 +5,7 @@ import { authMiddleware } from '../middleware/auth';
 const router = Router();
 
 // Get user profile
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const user = await User.findById(userId).select('id email fullName balance createdAt');
@@ -18,19 +18,19 @@ router.get('/profile', authMiddleware, async (req, res) => {
 
 // Get user statistics
 const Investment = require('../models/Investment');
-router.get('/stats', authMiddleware, async (req, res) => {
+router.get('/stats', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const investments = await Investment.find({ userId });
-    const totalInvested = investments.reduce((sum, inv) => sum + inv.investedAmount, 0);
-    const totalCurrentValue = investments.reduce((sum, inv) => sum + inv.currentValue, 0);
+    const totalInvested = investments.reduce((sum: number, inv: any) => sum + inv.investedAmount, 0);
+    const totalCurrentValue = investments.reduce((sum: number, inv: any) => sum + inv.currentValue, 0);
     const totalProfit = totalCurrentValue - totalInvested;
     res.json({
       totalInvestments: investments.length,
       totalInvested,
       totalCurrentValue,
       totalProfit,
-      activeInvestments: investments.filter(inv => inv.status === 'active').length
+      activeInvestments: investments.filter((inv: any) => inv.status === 'active').length
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch statistics' });
@@ -39,7 +39,7 @@ router.get('/stats', authMiddleware, async (req, res) => {
 
 export default router;
 // Admin: Get all users
-router.get('/admin/all', authMiddleware, async (req, res) => {
+router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const users = await User.find({});
@@ -50,7 +50,7 @@ router.get('/admin/all', authMiddleware, async (req, res) => {
 });
 
 // Admin: Edit user
-router.put('/admin/:id', authMiddleware, async (req, res) => {
+router.put('/admin/:id', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
@@ -63,7 +63,7 @@ router.put('/admin/:id', authMiddleware, async (req, res) => {
 });
 
 // Admin: Delete user
-router.delete('/admin/:id', authMiddleware, async (req, res) => {
+router.delete('/admin/:id', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
@@ -76,7 +76,7 @@ router.delete('/admin/:id', authMiddleware, async (req, res) => {
 
 // Admin: Reset user password
 // Admin: Update user account balance
-router.post('/admin/:id/balance', authMiddleware, async (req, res) => {
+router.post('/admin/:id/balance', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
@@ -92,7 +92,7 @@ router.post('/admin/:id/balance', authMiddleware, async (req, res) => {
   }
 });
 const bcrypt = require('bcryptjs');
-router.post('/admin/:id/reset-password', authMiddleware, async (req, res) => {
+router.post('/admin/:id/reset-password', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
