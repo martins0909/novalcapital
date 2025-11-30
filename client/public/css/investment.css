@@ -1,0 +1,162 @@
+
+
+/*this the dark background */
+
+
+.dark-image{
+  background-color: black;
+  margin: 0;
+  height: auto;
+  width: 100%;
+ font-family: 'Raleway';
+ display: block;
+}
+
+.dark-text {
+  text-align: center;
+  font-family:'Raleway';
+  height: auto;
+  width: 100%;
+  margin-top: 50px;
+  margin-left: 0px;
+}
+
+.dark-text h1{
+ font-size: 40px;
+ color: white;
+ font-family:'Raleway';
+}
+
+.dark-text b{
+ font-size: 20px;
+ color: white;
+ text-align: center;
+ font-family: 'Raleway';
+}
+
+.dark-text hr{
+ width: 40%;
+ color: #fb414f;
+ margin-left: 30%;
+}
+/* Cards  */
+.card {
+  height: 300px;
+  width: 300px;
+  background-color: white;
+  display: inline-block;
+  margin: 5px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+  font-family: 'raleway';
+  transition:0.5s;
+}
+
+.card:hover{
+  transform: scale(0.9);
+ text-decoration: none;
+ color: black;
+ 
+}
+
+.card:hover .card-text {
+ text-decoration: none;
+  
+}
+
+.card-price{
+ font-size: 16px;
+ font-family:'raleway';
+ position: absolute;
+ margin-left: 20px;
+}
+
+.cardprice-right{
+ font-size: 16px;
+ font-family:'raleway';
+ position: absolute;
+ margin-left: 240px;
+}
+
+.redtxt{
+ font-size: 18px;
+ text-align: center;
+ color: red;
+}
+
+.greentxt{
+ font-size: 18px;
+ text-align: center;
+ color: green;
+}
+
+.smalltxt{
+ font-size: 14px;
+ text-align: center;
+ color: darkgrey;
+}
+
+.card img{
+  background: linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), ;
+ height: 65%;
+ width: 100%;
+ margin: 0px;
+   
+}
+
+
+/* begining of media screen setting */
+@media screen and (min-width: 601px) {
+ .card {
+    height: 300px;
+    width: 300px;
+    
+  }
+ 
+ .card-text {
+  padding-top: 10px;
+  font-size: 20px;
+}
+ 
+}
+
+@media screen and (max-width: 645px) {
+ .card {
+    height: 215px;
+    width: 180px;
+  }
+ 
+ .card-text {
+  padding-top: 5px;
+  font-size: 12px;
+}
+ .card-price{
+  font-size: 12px;
+  margin-top: 8px;
+ }
+ 
+.cardprice-right{
+  margin-left: 132px;
+  font-size: 12px;
+  margin-top: 8px;
+ }
+ .greentxt{
+  font-size: 15px;
+ }
+ .redtxt{
+  font-size: 15px;
+ }
+ .smalltxt{
+  font-size: 12px;
+ }
+ 
+ 
+}
+
+/* END of media screen setting */
+
+
+/* begining of why us */
+

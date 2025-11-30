@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+}
+
+model User {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  email         String        @unique
+  password      String
+  fullName      String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  role          String        @default("user") // "admin" or "user"
+  balance       Float         @default(0)
+  investments   Investment[]
+  transactions  Transaction[]
+  payments      Payment[]
+}
+
+model Payment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  amount      Float
+  receipt     String
+  status      String   @default("pending") // pending, confirmed, rejected
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Investment {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  user             User     @relation(fields: [userId], references: [id])
+  planName         String
+  planType         String   // forex, stocks, crypto, diversified
+  investedAmount   Float
+  currentValue     Float
+  profit           Float    @default(0)
+  profitPercentage Float    @default(0)
+  duration         Int      // in days
+  roi              Float    // return on investment percentage
+  status           String   @default("active") // active, completed, cancelled
+  startDate        DateTime @default(now())
+  endDate          DateTime
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Transaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   // deposit, withdrawal, investment, profit
+  amount      Float
+  status      String   @default("pending") // pending, completed, failed
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

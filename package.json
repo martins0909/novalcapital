@@ -1,0 +1,30 @@
+{
+  "name": "bluestockfx-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack investment platform with client and server",
+  "scripts": {
+    "dev": "start /B npm run dev --prefix server && npm run dev --prefix client",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "install:all": "npm install --prefix client && npm install --prefix server",
+    "build": "npm run build --prefix client",
+    "start": "npm run dev --prefix server"
+  },
+  "keywords": [
+    "investment",
+    "trading",
+    "finance"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "mongodb": "^6.21.0",
+    "mongoose": "^8.20.1",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.0"
+  }
+}

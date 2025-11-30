@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ticker utilities */
+@layer utilities {
+  .ticker { overflow: hidden; position: relative; }
+  .ticker__track { display: inline-flex; white-space: nowrap; will-change: transform; animation: ticker-scroll 30s linear infinite; }
+  .ticker:hover .ticker__track { animation-play-state: paused; }
+}
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Legacy Fonts */
+@font-face {
+  font-family: "Merriweather";
+  font-style: normal;
+  font-weight: 900;
+  src: local(""), url("/fonts/merriweather-v30-latin-900.woff2") format("woff2"), url("/fonts/merriweather-v30-latin-900.woff") format("woff");
+  font-display: block;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  src: local(""), url("/fonts/poppins-v20-latin-300.woff2") format("woff2"), url("/fonts/poppins-v20-latin-300.woff") format("woff");
+  font-display: block;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""), url("/fonts/poppins-v20-latin-regular.woff2") format("woff2"), url("/fonts/poppins-v20-latin-regular.woff") format("woff");
+  font-display: block;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  src: local(""), url("/fonts/poppins-v20-latin-700.woff2") format("woff2"), url("/fonts/poppins-v20-latin-700.woff") format("woff");
+  font-display: block;
+}
+
+:root {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #F5F7F9;
+  color: #333333;
+  font-family: 'Poppins', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', sans-serif;
+  font-weight: 900;
+  color: #0c385f;
+  line-height: 1.2;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-5 py-3 rounded-lg font-bold text-xs transition-all duration-150;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white border border-primary;
+  }
+  
+  .btn-primary:hover {
+    @apply bg-primary-light text-heading border-primary-dark;
+  }
+  
+  .btn-info {
+    @apply bg-info text-white border border-info;
+  }
+  
+  .btn-info:hover {
+    @apply bg-info-light;
+  }
+  
+  .btn-warning {
+    @apply bg-warning text-gray-900 border border-warning;
+  }
+  
+  .btn-warning:hover {
+    @apply bg-warning-light;
+  }
+  
+  .btn-success {
+    @apply bg-success text-white border border-success;
+  }
+  
+  .btn-success:hover {
+    @apply bg-success-light;
+  }
+  
+  .btn-danger {
+    @apply bg-danger text-white border border-danger;
+  }
+  
+  .btn-link {
+    @apply text-link hover:text-info-dark bg-transparent border-transparent;
+  }
+  
+  .card {
+    @apply bg-white rounded-none border border-border overflow-hidden;
+    padding: 1.75rem;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-400 hover:bg-white;
+    background-color: transparent;
+    border-color: #dedede;
+  }
+  
+  .card-shadow {
+    @apply border-0 shadow-card;
+  }
+  
+  .badge-up {
+    @apply bg-green-500 text-white px-2 py-1 rounded text-sm;
+  }
+  
+  .badge-down {
+    @apply bg-red-500 text-white px-2 py-1 rounded text-sm;
+  }
+}

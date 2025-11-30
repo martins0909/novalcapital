@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Box icon">
+  <path d="M10 22l22-10 22 10v20L32 52 10 42V22Z" fill="#EEF5FB" stroke="#1A5C96" stroke-width="2"/>
+  <path d="M32 12v20l22 10" stroke="#1A5C96" stroke-width="2"/>
+  <path d="M32 12L10 22l22 10 22-10-22-10Z" fill="#fff" opacity="0.7"/>
+</svg>
