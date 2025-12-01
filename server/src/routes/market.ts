@@ -15,9 +15,9 @@ async function fetchRates(base: string, symbols: string[], date?: string) {
   const url = `${baseUrl}${path}?base=${encodeURIComponent(base)}&symbols=${encodeURIComponent(symbols.join(','))}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch rates: ${res.status}`);
-  const data = await res.json();
+  const data = await res.json() as { rates?: Record<string, number> };
   if (!data.rates) throw new Error('Rates not found in response');
-  return data.rates as Record<string, number>;
+  return data.rates;
 }
 
 function computeChange(current: number, previous: number) {
