@@ -45,7 +45,7 @@ router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => 
     const users = await User.find({});
     res.json(users);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch users', details: err.message });
+    res.status(500).json({ error: 'Failed to fetch users', details: err instanceof Error ? err.message : String(err) });
   }
 });
 

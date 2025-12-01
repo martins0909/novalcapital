@@ -15,15 +15,15 @@ async function fetchRates(base: string, symbols: string[], date?: string) {
   const url = `${baseUrl}${path}?base=${encodeURIComponent(base)}&symbols=${encodeURIComponent(symbols.join(','))}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch rates: ${res.status}`);
-  const data: { rates?: Record<string, number> } = await res.json();
+  const data = await res.json();
   if (!data.rates) throw new Error('Rates not found in response');
-  return data.rates;
+  return data.rates as Record<string, number>;
 }
 
 function computeChange(current: number, previous: number) {
   if (!previous || previous === 0) return { changePercent: 0, trend: 'flat' as const };
   const changePercent = ((current - previous) / previous) * 100;
-  const trend = changePercent > 0.0001 ? 'up' : changePercent < -0.0001 ? 'down' : 'flat';
+  const trend: 'up' | 'down' | 'flat' = changePercent > 0.0001 ? 'up' : changePercent < -0.0001 ? 'down' : 'flat';
   return { changePercent, trend };
 }
 

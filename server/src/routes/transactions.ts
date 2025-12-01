@@ -10,7 +10,7 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
     const { type, status, limit = 50 } = req.query;
-    const query = { userId };
+    const query: any = { userId };
     if (type) query.type = type;
     if (status) query.status = status;
     const transactions = await Transaction.find(query).sort({ createdAt: -1 }).limit(Number(limit));

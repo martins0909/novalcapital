@@ -10,10 +10,10 @@ const router = Router();
 
 // Multer setup for uploads
 const storage = multer.diskStorage({
-  destination: function (req: Request, file: Express.Multer.File, cb) {
+  destination: function (req: Request, file: any, cb: (error: Error | null, destination: string) => void) {
     cb(null, path.join(__dirname, '../../uploads'));
   },
-  filename: function (req: Request, file: Express.Multer.File, cb) {
+  filename: function (req: Request, file: any, cb: (error: Error | null, filename: string) => void) {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
