@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc && npm run copy-models",
+    "build": "tsc && npm run copy-models && prisma generate",
     "copy-models": "cp -r src/models dist/models",
     "start": "node dist/index.js",
     "prisma:generate": "prisma generate",
