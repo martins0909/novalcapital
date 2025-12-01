@@ -7,6 +7,9 @@ declare global {
       userId?: string;
       role?: string;
       file?: Multer.File;
+      email?: string;
     }
   }
 }
+
+declare module 'multer';
