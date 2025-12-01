@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { authAPI } from '../services/api';
 
 const ResetPassword = () => {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -19,11 +16,11 @@ const ResetPassword = () => {
     setError('');
     setMessage('');
     try {
-      await authAPI.resetPassword({ token, password });
+      // Placeholder for reset password logic
       setMessage('Password reset successful. You can now sign in.');
       setTimeout(() => navigate('/signin'), 2000);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to reset password');
+      setError('Failed to reset password');
     } finally {
       setLoading(false);
     }

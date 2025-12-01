@@ -1,5 +1,3 @@
-import React from "react";
-
 const boxStyle = "bg-white rounded-lg shadow flex flex-col items-center justify-between aspect-square w-full h-full p-0 overflow-hidden";
 const imgStyle = "object-cover w-full h-full rounded-lg";
 

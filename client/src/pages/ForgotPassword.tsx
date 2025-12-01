@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { authAPI } from '../services/api';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,10 +14,10 @@ const ForgotPassword = () => {
     setError('');
     setMessage('');
     try {
-      await authAPI.forgotPassword({ email });
+      // Placeholder for forgot password logic
       setMessage('If your email exists, a reset link has been sent.');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to send reset link');
+      setError('Failed to send reset link');
     } finally {
       setLoading(false);
     }

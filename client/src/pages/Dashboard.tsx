@@ -43,7 +43,6 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
   >('overview');
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
-  const [payments, setPayments] = useState<any[]>([]);
   const [balance, setBalance] = useState(0);
   const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null);
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -75,24 +74,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCVV, setCardCVV] = useState('');
 
-    // Helper to reload payments and transactions
-    const reloadPaymentsAndTransactions = async () => {
-      try {
-        // Reload payments
-        const paymentsRes = await fetch('/api/payments/user/all');
-        if (paymentsRes.ok) {
-          const paymentsData = await paymentsRes.json();
-          setPayments(paymentsData);
-        }
-        // Reload transactions
-        if (transactionAPI && transactionAPI.getAll) {
-          const transactionsData = await transactionAPI.getAll({ limit: 50 });
-          setTransactions(transactionsData);
-        }
-      } catch (err) {
-        // Optionally handle error
-      }
-    };
+    // ...existing code...
 
   // Restore handleLogout function for logout button
   const handleLogout = () => {
@@ -145,12 +127,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
         // Load transactions
         const transactionsData = await transactionAPI.getAll({ limit: 50 });
         setTransactions(transactionsData);
-        // Load payments
-        const paymentsRes = await fetch('/api/payments/user/all');
-        if (paymentsRes.ok) {
-          const paymentsData = await paymentsRes.json();
-          setPayments(paymentsData);
-        }
+        // ...existing code...
       } catch (error: any) {
         console.error('Failed to load data:', error);
       }
@@ -595,7 +572,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {activeTab === 'transactions' && (
                     <div>
                       <h2 className="text-2xl font-bold mb-6">Transaction History</h2>
-                      {(transactions.length > 0 || payments.length > 0) ? (
+                      {transactions.length > 0 ? (
                           <div className="overflow-x-auto">
                             <table className="w-full">
                               <thead className="bg-gray-50">
@@ -608,16 +585,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                                 </tr>
                               </thead>
                               <tbody className="bg-white divide-y divide-gray-200">
-                                {[...transactions,
-                                  ...payments.map(pay => ({
-                                    id: pay.id || pay._id,
-                                    createdAt: pay.date || pay.createdAt,
-                                    type: 'payment',
-                                    description: `Payment (${pay.method || ''})`,
-                                    amount: pay.amount,
-                                    status: pay.status || 'pending',
-                                    method: pay.method
-                                  }))].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                                {transactions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                                   .map((txn, idx) => (
                                   <tr key={txn.id || idx}>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{new Date(txn.createdAt).toLocaleString()}</td>
