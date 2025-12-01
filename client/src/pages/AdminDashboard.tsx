@@ -226,7 +226,7 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user: any) => (
+                  {(Array.isArray(users) ? users : []).map((user: any) => (
                     <tr key={user._id || user.id} className="border-b hover:bg-gray-100">
                       <td className="text-left">{user.email}</td>
                       <td className="text-left">{user.fullName || user.name}</td>
@@ -258,7 +258,7 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactions.map((tx: any) => (
+                  {(Array.isArray(transactions) ? transactions : []).map((tx: any) => (
                     <tr key={tx._id || tx.id} className="border-b hover:bg-gray-100">
                       <td className="text-left">{tx.userId?.email || tx.userId || 'N/A'}</td>
                       <td className="text-left">{tx.type}</td>
@@ -290,7 +290,7 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {investments.map((inv: any) => (
+                  {(Array.isArray(investments) ? investments : []).map((inv: any) => (
                     <tr key={inv._id || inv.id} className="border-b hover:bg-gray-100">
                       <td className="text-left">{inv._id || inv.id}</td>
                       <td className="text-left">{inv.userId?.email || inv.userId || 'N/A'}</td>
@@ -323,7 +323,7 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {payments.map((pay: any) => (
+                  {(Array.isArray(payments) ? payments : []).map((pay: any) => (
                     <tr key={pay._id || pay.id} className="border-b hover:bg-gray-100">
                       <td className="text-left">{pay.user?.email || 'N/A'}</td>
                       <td className="text-right">${isNaN(pay.amount) ? 0 : pay.amount}</td>
@@ -406,7 +406,7 @@ const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {trackData.map((row: any) => (
+                  {(Array.isArray(trackData) ? trackData : []).map((row: any) => (
                       <tr key={row.id} className={row.totalInvested === 0 && row.currentValue === 0 && row.totalProfit === 0 ? "border-b bg-gray-50" : "border-b hover:bg-gray-100"}>
                         <td className="px-4 py-2 align-middle font-medium text-left">{row.email || row.name}</td>
                         <td className="px-4 py-2 align-middle text-right">
