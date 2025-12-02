@@ -95,7 +95,7 @@ export const userAPI = {
 // Transaction API
 export const transactionAPI = {
   getAll: async (params?: { type?: string; status?: string; limit?: number }) => {
-    const response = await api.get('/transactions', { params });
+    const response = await api.get('/api/transactions', { params });
     return response.data;
   },
 
