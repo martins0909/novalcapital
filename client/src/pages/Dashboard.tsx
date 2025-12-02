@@ -429,9 +429,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             formData.append('amount', fundAmount);
                             formData.append('currency', fundCurrency);
                             formData.append('method', fundMethod);
-                            if (fundReceipt) {
-                              formData.append('receipt', fundReceipt);
-                            }
+                            // Do not require receipt for initial payment save
                             const res = await fetch('/api/payments/user/create', {
                               method: 'POST',
                               body: formData
@@ -440,13 +438,17 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                               setShowFundOverview(true);
                               console.log('[FUND WALLET] Payment saved, showing details page.');
                             } else {
+                              // Always show Payment Details page for user to upload receipt
+                              setShowFundOverview(true);
                               const errorText = await res.text();
-                              console.error('[FUND WALLET] Payment save failed:', errorText);
-                              alert('Failed to save payment.');
+                              console.error('[FUND WALLET] Payment save failed, but showing details page:', errorText);
+                              alert('Failed to save payment. You can still upload your receipt.');
                             }
                           } catch (err) {
-                            console.error('[FUND WALLET] Error saving payment:', err);
-                            alert('Error saving payment.');
+                            // Always show Payment Details page for user to upload receipt
+                            setShowFundOverview(true);
+                            console.error('[FUND WALLET] Error saving payment, but showing details page:', err);
+                            alert('Error saving payment. You can still upload your receipt.');
                           }
                         }}
                       >Continue</button>
