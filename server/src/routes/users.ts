@@ -7,11 +7,19 @@ const router = Router();
 // Get user profile
 router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const token = req.headers.authorization;
     const userId = req.userId;
+    console.log('[PROFILE] Token:', token);
+    console.log('[PROFILE] userId:', userId);
     const user = await User.findById(userId).select('id email fullName balance createdAt');
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) {
+      console.log('[PROFILE] User not found for userId:', userId);
+      return res.status(404).json({ error: 'User not found' });
+    }
+    console.log('[PROFILE] User found:', user);
     res.json(user);
   } catch (error) {
+    console.error('[PROFILE] Error:', error);
     res.status(500).json({ error: 'Failed to fetch profile' });
   }
 });
