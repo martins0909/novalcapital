@@ -225,7 +225,18 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
               {/* Stats Cards */}
               <div className="grid md:grid-cols-4 gap-6 mb-8">
                 <div className="card p-6">
-                  <div className="text-gray-600 mb-2">Account Balance</div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-600">Account Balance</span>
+                    <button className="btn btn-xs btn-outline" onClick={async () => {
+                      try {
+                        const profile = await userAPI.getProfile();
+                        setUser(profile);
+                        setBalance(profile.balance || 0);
+                      } catch (error) {
+                        alert('Failed to refresh balance');
+                      }
+                    }}>Refresh</button>
+                  </div>
                   <div className="text-3xl font-bold text-primary">${balance.toLocaleString()}</div>
                 </div>
                 <div className="card p-6">
