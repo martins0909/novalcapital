@@ -152,7 +152,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
   // Investment plans (mock data)
   const investmentPlans = [
     { name: 'Starter Plan', type: 'fixed', minAmount: 50, maxAmount: 1999, duration: '24hours', roi: 6 },
-    { name: 'Growth Plan', type: 'flexible', minAmount: 5000, maxAmount: 20000, duration: '90 days', roi: 25 },
+    { name: 'Growth Plan', type: 'flexible', minAmount: 2000, maxAmount: 4999, duration: '2 days', roi: 10 },
     { name: 'Pro Plan', type: 'fixed', minAmount: 20000, maxAmount: 100000, duration: '180 days', roi: 50 },
   ];
 
