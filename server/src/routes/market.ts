@@ -15,7 +15,7 @@ async function fetchRates(base: string, symbols: string[], date?: string) {
   const url = `${baseUrl}${path}?base=${encodeURIComponent(base)}&symbols=${encodeURIComponent(symbols.join(','))}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch rates: ${res.status}`);
-  const data = await res.json();
+  const data = await res.json() as { rates?: Record<string, number> };
   if (!data.rates) {
     console.error('Rates not found in response:', JSON.stringify(data));
     // Provide fallback: return empty object so dashboard doesn't break
