@@ -42,7 +42,7 @@ export default router;
 router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select('id email fullName role balance');
     console.log('[ADMIN] /admin/all users:', users);
     res.json(users);
   } catch (err) {
