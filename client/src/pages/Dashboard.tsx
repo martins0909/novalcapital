@@ -421,17 +421,19 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                         className="btn btn-primary w-full"
                         disabled={!fundMethod || !fundAmount}
                         onClick={async () => {
-                          // Save payment to backend
+                          // Save payment to backend using FormData
                           try {
+                            const formData = new FormData();
+                            formData.append('userId', user?.id);
+                            formData.append('amount', fundAmount);
+                            formData.append('currency', fundCurrency);
+                            formData.append('method', fundMethod);
+                            if (fundReceipt) {
+                              formData.append('receipt', fundReceipt);
+                            }
                             const res = await fetch('/api/payments/user/create', {
                               method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                userId: user?.id,
-                                amount: fundAmount,
-                                currency: fundCurrency,
-                                method: fundMethod
-                              })
+                              body: formData
                             });
                             if (res.ok) {
                               setShowFundOverview(true);
