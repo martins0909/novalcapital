@@ -43,8 +43,10 @@ router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => 
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const users = await User.find({});
+    console.log('[ADMIN] /admin/all users:', users);
     res.json(users);
   } catch (err) {
+    console.error('[ADMIN] /admin/all error:', err);
     res.status(500).json({ error: 'Failed to fetch users', details: err instanceof Error ? err.message : String(err) });
   }
 });

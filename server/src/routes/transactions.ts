@@ -64,8 +64,10 @@ router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => 
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const txs = await Transaction.find({}).populate('userId');
+    console.log('[ADMIN] /admin/all transactions:', txs);
     res.json(txs);
   } catch (err) {
+    console.error('[ADMIN] /admin/all error:', err);
     res.status(500).json({ error: 'Failed to fetch transactions' });
   }
 });
