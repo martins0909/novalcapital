@@ -442,7 +442,7 @@ const AdminDashboard: React.FC = () => {
                                 return;
                               }
                               try {
-                                const res = await axios.post(`/api/users/admin/${row.id}/balance`, { amount }, {
+                                const res = await axios.post(`${API_BASE_URL}/api/users/admin/${row.id}/balance`, { amount }, {
                                   headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
                                 });
                                 setTrackData(prev => prev.map(r => r.id === row.id ? { ...r, balance: res.data.balance } : r));
