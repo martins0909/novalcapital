@@ -423,6 +423,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                         onClick={async () => {
                           // Save payment to backend using FormData
                           try {
+                            console.log('[FUND WALLET] userId:', user?.id);
                             const formData = new FormData();
                             formData.append('userId', user?.id);
                             formData.append('amount', fundAmount);
@@ -437,10 +438,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             });
                             if (res.ok) {
                               setShowFundOverview(true);
+                              console.log('[FUND WALLET] Payment saved, showing details page.');
                             } else {
+                              const errorText = await res.text();
+                              console.error('[FUND WALLET] Payment save failed:', errorText);
                               alert('Failed to save payment.');
                             }
                           } catch (err) {
+                            console.error('[FUND WALLET] Error saving payment:', err);
                             alert('Error saving payment.');
                           }
                         }}
