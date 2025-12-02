@@ -241,6 +241,7 @@ const AdminDashboard: React.FC = () => {
                   <tr className="bg-gray-50 text-gray-700">
                     <th className="text-left">Email</th>
                     <th className="text-left">Name</th>
+                    <th className="text-right">Account Balance</th>
                     <th className="text-left">Role</th>
                     <th className="text-left">Actions</th>
                   </tr>
@@ -250,6 +251,7 @@ const AdminDashboard: React.FC = () => {
                     <tr key={user._id || user.id} className="border-b hover:bg-gray-100">
                       <td className="text-left">{user.email}</td>
                       <td className="text-left">{user.fullName || user.name}</td>
+                      <td className="text-right">{isNaN(user.balance) ? 0 : user.balance}</td>
                       <td className="text-left">{user.role}</td>
                       <td className="text-left">
                         <button className="btn btn-xs btn-outline mr-1" onClick={() => handleView(user)}>View</button>
@@ -453,6 +455,7 @@ const AdminDashboard: React.FC = () => {
                                     balance: res.data.balance
                                   }
                                 }));
+                                setUsers(prev => prev.map(u => (u._id === row.id || u.id === row.id) ? { ...u, balance: res.data.balance } : u));
                                 amountInput.value = '';
                               } catch (err) {
                                 alert('Failed to update balance');
