@@ -82,7 +82,7 @@ export const investmentAPI = {
 // User API
 export const userAPI = {
   getProfile: async () => {
-    const response = await api.get('/users/profile');
+    const response = await api.get('/api/users/profile');
     return response.data;
   },
 
