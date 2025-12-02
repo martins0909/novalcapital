@@ -40,12 +40,12 @@ export const authAPI = {
 // Investment API
 export const investmentAPI = {
   getAll: async () => {
-    const response = await api.get('/investments');
+    const response = await api.get('/api/investments');
     return response.data;
   },
 
   getAllAdmin: async () => {
-    const response = await api.get('/investments/admin/all');
+    const response = await api.get('/api/investments/admin/all');
     return response.data;
   },
 
@@ -56,12 +56,12 @@ export const investmentAPI = {
     duration: number;
     roi: number;
   }) => {
-    const response = await api.post('/investments', data);
+    const response = await api.post('/api/investments', data);
     return response.data;
   },
 
   getById: async (id: string) => {
-    const response = await api.get(`/investments/${id}`);
+    const response = await api.get(`/api/investments/${id}`);
     return response.data;
   },
 
@@ -69,12 +69,12 @@ export const investmentAPI = {
     id: string,
     data: { currentValue?: number; profit?: number; profitPercentage?: number }
   ) => {
-    const response = await api.put(`/investments/${id}`, data);
+    const response = await api.put(`/api/investments/${id}`, data);
     return response.data;
   },
 
   withdraw: async (id: string, amount: number) => {
-    const response = await api.post(`/investments/${id}/withdraw`, { amount });
+    const response = await api.post(`/api/investments/${id}/withdraw`, { amount });
     return response.data;
   },
 };
