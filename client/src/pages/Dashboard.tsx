@@ -1,3 +1,16 @@
+    if (!user?.id) {
+      try {
+        const profile = await userAPI.getProfile();
+        setUser(profile);
+        if (!profile?.id) {
+          alert('User profile not loaded. Please log in again.');
+          return;
+        }
+      } catch (err) {
+        alert('Failed to load user profile. Please log in again.');
+        return;
+      }
+    }
 import TradingViewWidget from '../components/TradingViewWidget';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -422,6 +435,8 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                         disabled={!fundMethod || !fundAmount}
                         onClick={async () => {
                           // Save payment to backend using FormData
+                          await handleFundWalletContinue();
+                          if (!user?.id) return;
                           try {
                             console.log('[FUND WALLET] userId:', user?.id);
                             const formData = new FormData();
