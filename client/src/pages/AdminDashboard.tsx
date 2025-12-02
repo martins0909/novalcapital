@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
+
 import axios from 'axios';
 import { simulatePortfolioGrowth } from '../utils/investmentSimulator';
 import { useNavigate } from 'react-router-dom';
+
+// Use VITE_API_URL for API base URL (Vite standard)
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 const AdminDashboard: React.FC = () => {
     // Modal state
@@ -62,31 +66,43 @@ const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     if (activeTab === 'users') {
-      axios.get('/api/users/admin/all', {
+      axios.get(`${API_BASE_URL}/api/users/admin/all`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
       })
       .then(res => setUsers(res.data))
-      .catch(() => setUsers([]));
+      .catch(err => {
+        setUsers([]);
+        console.error('[ADMIN DASHBOARD] Users fetch error:', err);
+      });
     } else if (activeTab === 'transactions') {
-      axios.get('/api/transactions/admin/all', {
+      axios.get(`${API_BASE_URL}/api/transactions/admin/all`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
       })
       .then(res => setTransactions(res.data))
-      .catch(() => setTransactions([]));
+      .catch(err => {
+        setTransactions([]);
+        console.error('[ADMIN DASHBOARD] Transactions fetch error:', err);
+      });
     } else if (activeTab === 'investments') {
-      axios.get('/api/investments/admin/all', {
+      axios.get(`${API_BASE_URL}/api/investments/admin/all`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
       })
       .then(res => setInvestments(res.data))
-      .catch(() => setInvestments([]));
+      .catch(err => {
+        setInvestments([]);
+        console.error('[ADMIN DASHBOARD] Investments fetch error:', err);
+      });
     } else if (activeTab === 'payments') {
-      axios.get('/api/payments/admin/all', {
+      axios.get(`${API_BASE_URL}/api/payments/admin/all`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
       })
       .then(res => setPayments(res.data))
-      .catch(() => setPayments([]));
+      .catch(err => {
+        setPayments([]);
+        console.error('[ADMIN DASHBOARD] Payments fetch error:', err);
+      });
     } else if (activeTab === 'track') {
-      axios.get('/api/users/admin/all', {
+      axios.get(`${API_BASE_URL}/api/users/admin/all`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
       })
       .then(async res => {
@@ -94,16 +110,17 @@ const AdminDashboard: React.FC = () => {
         const promises = usersList.map(async (user: any) => {
           let investments = [];
           try {
-            const invRes = await axios.get(`/api/investments/user/${user._id || user.id}`, {
+            const invRes = await axios.get(`${API_BASE_URL}/api/investments/user/${user._id || user.id}`, {
               headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
             });
             investments = invRes.data || [];
-              // Debug log: print API response for each user
-              console.log('API response for user', user._id || user.id, investments);
+            // Debug log: print API response for each user
+            console.log('API response for user', user._id || user.id, investments);
           } catch (err: any) {
             if (err.response && err.response.status === 404) {
               investments = [];
             } else {
+              console.error('[ADMIN DASHBOARD] Track investments fetch error:', err);
               throw err;
             }
           }
@@ -114,7 +131,10 @@ const AdminDashboard: React.FC = () => {
         trackRaw.forEach(row => { rawMap[row.id] = { ...row }; });
         setTrackRawInvestments(rawMap);
       })
-      .catch(() => setTrackRawInvestments({}));
+      .catch(err => {
+        setTrackRawInvestments({});
+        console.error('[ADMIN DASHBOARD] Track users fetch error:', err);
+      });
     }
   }, [activeTab]);
 
