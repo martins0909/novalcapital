@@ -154,6 +154,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
     { name: 'Starter Plan', type: 'fixed', minAmount: 50, maxAmount: 1999, duration: '24hours', roi: 6 },
     { name: 'Growth Plan', type: 'flexible', minAmount: 2000, maxAmount: 4999, duration: '2 days', roi: 10 },
     { name: 'Pro Plan', type: 'fixed', minAmount: 5000, maxAmount: 29999, duration: '5 days', roi: 15 },
+    { name: 'Bonus Plan', type: 'fixed', minAmount: 30000, maxAmount: 49999, duration: '30 days', roi: 30 },
   ];
 
   // Withdraw handler
