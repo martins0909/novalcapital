@@ -430,9 +430,11 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             formData.append('currency', fundCurrency);
                             formData.append('method', fundMethod);
                             // Do not require receipt for initial payment save
+                            const token = localStorage.getItem('authToken');
                             const res = await fetch('/api/payments/user/create', {
                               method: 'POST',
-                              body: formData
+                              body: formData,
+                              headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                             });
                             if (res.ok) {
                               setShowFundOverview(true);
