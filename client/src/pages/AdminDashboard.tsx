@@ -446,6 +446,13 @@ const AdminDashboard: React.FC = () => {
                                   headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
                                 });
                                 setTrackData(prev => prev.map(r => r.id === row.id ? { ...r, balance: res.data.balance } : r));
+                                setTrackRawInvestments(prev => ({
+                                  ...prev,
+                                  [row.id]: {
+                                    ...prev[row.id],
+                                    balance: res.data.balance
+                                  }
+                                }));
                                 amountInput.value = '';
                               } catch (err) {
                                 alert('Failed to update balance');
