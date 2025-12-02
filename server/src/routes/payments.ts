@@ -20,9 +20,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // User: Create payment and transaction
-router.post('/user/create', upload.single('receipt'), async (req: Request, res: Response) => {
+// User: Create payment and transaction
+router.post('/user/create', authMiddleware, upload.single('receipt'), async (req: Request, res: Response) => {
   try {
-    const { userId, amount, currency, method, transactionId, date } = req.body;
+    const { amount, currency, method, transactionId, date } = req.body;
+    const userId = req.userId;
     let receiptUrl = '';
     if (req.file) {
       receiptUrl = '/uploads/' + req.file.filename;
