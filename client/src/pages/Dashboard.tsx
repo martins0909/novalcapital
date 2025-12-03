@@ -432,8 +432,22 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                       <input type="number" value={fundAmount} onChange={e => setFundAmount(e.target.value)} className="w-full mb-4 px-4 py-2 border rounded" placeholder="Enter amount" />
                       <button
                         className="btn btn-primary w-full"
-                        disabled={!fundMethod || !fundAmount}
+                        disabled={!fundMethod || !fundAmount || !user?.id}
                         onClick={async () => {
+                          // Ensure user profile is loaded before payment
+                          if (!user?.id) {
+                            try {
+                              const profile = await userAPI.getProfile();
+                              setUser(profile);
+                              if (!profile?.id) {
+                                alert('User profile not loaded. Please log in again.');
+                                return;
+                              }
+                            } catch (err) {
+                              alert('Failed to load user profile. Please log in again.');
+                              return;
+                            }
+                          }
                           // Save payment to backend using FormData
                           await handleFundWalletContinue();
                           if (!user?.id) return;
