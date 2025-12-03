@@ -1,7 +1,7 @@
 import React from 'react';
 import './LoadingOverlay.css';
 
-// File intentionally left blank after removal of loading logo animation.
-export default LoadingOverlay;
+// Loading overlay removed — export a no-op component so imports remain valid.
+const LoadingOverlay: React.FC = () => null;
 
 export default LoadingOverlay;
