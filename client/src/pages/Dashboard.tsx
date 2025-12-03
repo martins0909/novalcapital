@@ -418,25 +418,13 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                       </select>
                       <label className="block mb-2 font-medium">Amount to Deposit</label>
                       <input type="number" value={fundAmount} onChange={e => setFundAmount(e.target.value)} className="w-full mb-4 px-4 py-2 border rounded" placeholder="Enter amount" />
-                      <button
-                        className="btn btn-primary w-full"
-                        // For debugging, always enable the button
-                        disabled={false}
-                        onClick={async () => {
-                          console.log('[FUND WALLET] Continue button clicked');
-                          alert('DEBUG: Continue button clicked!');
-                          console.log('Current state:', {
-                            fundMethod,
-                            fundAmount,
-                            fundCurrency,
-                            user,
-                            userId: user?._id,
-                            token: localStorage.getItem('authToken'),
-                          });
-                          // On click, always show Payment Details page
-                          setShowFundOverview(true);
-                        }}
-                      >Continue</button>
+                       <button
+                         className="btn btn-primary w-full"
+                         onClick={() => {
+                           // Only show Payment Details page, no payment save or debug
+                           setShowFundOverview(true);
+                         }}
+                       >Continue</button>
                     </div>
                   )}
                   {activeTab === 'fundwallet' && showFundOverview && (
