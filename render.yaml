@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: novalcapital-client
+    env: static
+    plan: free
+    staticPublishPath: client/dist
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: /index.html
