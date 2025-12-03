@@ -521,13 +521,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                               if (res.ok) {
                                 alert('Receipt uploaded! Awaiting admin confirmation.');
                                 setShowFundOverview(false);
+                                navigate('/dashboard');
                               } else {
                                 alert('Failed to upload receipt.');
                               }
                             };
                             reader.readAsDataURL(fundReceipt);
                           } catch (err) {
-                            alert('Error uploading receipt.');
+                            // Removed error popup for uploading receipt
                           }
                         }}
                       >Done</button>
