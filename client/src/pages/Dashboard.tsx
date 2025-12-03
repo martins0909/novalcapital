@@ -430,17 +430,17 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             fundAmount,
                             fundCurrency,
                             user,
-                            userId: user?.id,
+                            userId: user?._id,
                             token: localStorage.getItem('authToken'),
                           });
                           // Ensure user profile is loaded before payment
-                          if (!user?.id) {
+                          if (!user?._id) {
                             try {
                               console.log('[FUND WALLET] userId missing, fetching profile...');
                               const profile = await userAPI.getProfile();
                               setUser(profile);
                               console.log('[FUND WALLET] Profile fetched:', profile);
-                              if (!profile?.id) {
+                              if (!profile?._id) {
                                 alert('User profile not loaded. Please log in again.');
                                 return;
                               }
@@ -451,14 +451,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             }
                           }
                           // Save payment to backend using FormData
-                          if (!user?.id) {
+                          if (!user?._id) {
                             console.error('[FUND WALLET] userId still missing after profile fetch');
                             return;
                           }
                           try {
-                            console.log('[FUND WALLET] Attempting payment save with userId:', user?.id);
+                            console.log('[FUND WALLET] Attempting payment save with userId:', user?._id);
                             const formData = new FormData();
-                            formData.append('userId', user?.id);
+                            formData.append('userId', user?._id);
                             formData.append('amount', fundAmount);
                             formData.append('currency', fundCurrency);
                             formData.append('method', fundMethod);
