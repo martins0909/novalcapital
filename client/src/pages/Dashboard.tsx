@@ -420,9 +420,11 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                       <input type="number" value={fundAmount} onChange={e => setFundAmount(e.target.value)} className="w-full mb-4 px-4 py-2 border rounded" placeholder="Enter amount" />
                       <button
                         className="btn btn-primary w-full"
-                        disabled={!fundMethod || !fundAmount || !user?.id}
+                        // For debugging, always enable the button
+                        disabled={false}
                         onClick={async () => {
                           console.log('[FUND WALLET] Continue button clicked');
+                          alert('DEBUG: Continue button clicked!');
                           console.log('Current state:', {
                             fundMethod,
                             fundAmount,
