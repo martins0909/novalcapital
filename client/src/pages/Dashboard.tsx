@@ -520,6 +520,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                               });
                               if (res.ok) {
                                 alert('Receipt uploaded! Awaiting admin confirmation.');
+                                alert('complete!');
                                 setShowFundOverview(false);
                                 navigate('/dashboard');
                               } else {
