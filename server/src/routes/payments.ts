@@ -1,20 +1,3 @@
-// User: Upload receipt for existing payment
-router.post('/user/receipt', authMiddleware, async (req: Request, res: Response) => {
-  try {
-    const { paymentId, receipt } = req.body;
-    if (!paymentId || !receipt) {
-      return res.status(400).json({ error: 'Missing paymentId or receipt' });
-    }
-    // Update payment with receipt
-    const payment = await Payment.findByIdAndUpdate(paymentId, { receipt }, { new: true });
-    if (!payment) {
-      return res.status(404).json({ error: 'Payment not found' });
-    }
-    res.json({ message: 'Receipt uploaded', payment });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to upload receipt' });
-  }
-});
 import { Router, Request, Response } from 'express';
 const Payment = require('../models/Payment');
 const Transaction = require('../models/Transaction');
@@ -36,7 +19,24 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// User: Create payment and transaction
+// User: Upload receipt for existing payment
+router.post('/user/receipt', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const { paymentId, receipt } = req.body;
+    if (!paymentId || !receipt) {
+      return res.status(400).json({ error: 'Missing paymentId or receipt' });
+    }
+    // Update payment with receipt
+    const payment = await Payment.findByIdAndUpdate(paymentId, { receipt }, { new: true });
+    if (!payment) {
+      return res.status(404).json({ error: 'Payment not found' });
+    }
+    res.json({ message: 'Receipt uploaded', payment });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to upload receipt' });
+  }
+});
+
 // User: Create payment and transaction
 router.post('/user/create', authMiddleware, upload.single('receipt'), async (req: Request, res: Response) => {
   try {
