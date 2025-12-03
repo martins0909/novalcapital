@@ -58,7 +58,7 @@ const Contact = () => {
                     <img src="/img/in-cirro-2-icon-1.svg" alt="Email" className="w-8 h-8 mr-4" />
                     <div>
                       <h3 className="font-semibold mb-1">Email</h3>
-                      <p className="text-gray-600">support@novalcapitalfx.com</p>
+                      <p className="text-gray-600">novalcapital@novalcapital.org</p>
                     </div>
                   </div>
 
