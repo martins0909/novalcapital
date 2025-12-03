@@ -497,7 +497,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                               return;
                             }
                             // Find the latest payment for this user and amount
-                            const paymentsRes = await fetch('/api/payments/user/all?userId=' + user?.id);
+                            const paymentsRes = await fetch(`/payments/user/all?userId=${user?._id}`);
                             const paymentsData = paymentsRes.ok ? await paymentsRes.json() : [];
                             const latestPayment = paymentsData
                               .filter((p: any) => p.amount == fundAmount && p.method === fundMethod && p.status === 'pending')
@@ -510,7 +510,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             const reader = new FileReader();
                             reader.onload = async (e) => {
                               const base64Receipt = e.target?.result;
-                              const res = await fetch('/api/payments/user/receipt', {
+                              const res = await fetch('/payments/user/receipt', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
