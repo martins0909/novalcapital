@@ -185,10 +185,10 @@ const AdminDashboard: React.FC = () => {
   }, [activeTab, trackRawInvestments]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-7xl mx-auto bg-white rounded shadow p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
+      <div className="max-w-7xl mx-auto bg-white rounded shadow p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold">Admin Dashboard</h1>
           <button
             className="btn btn-error btn-sm"
             onClick={() => {
@@ -197,11 +197,11 @@ const AdminDashboard: React.FC = () => {
             }}
           >Logout</button>
         </div>
-        <nav className="mb-8">
-          <ul className="flex space-x-4 border-b pb-2">
+        <nav className="mb-6">
+          <ul className="flex flex-wrap gap-2 border-b pb-2 overflow-x-auto">
             <li>
               <button
-                className={`px-4 py-2 font-semibold ${activeTab === 'users' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
+                className={`px-3 py-1 sm:px-4 sm:py-2 font-semibold ${activeTab === 'users' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
                 onClick={() => setActiveTab('users')}
               >User Management</button>
             </li>
@@ -236,7 +236,7 @@ const AdminDashboard: React.FC = () => {
           <div className="card p-4">
             <h2 className="text-xl font-semibold mb-2">User Management</h2>
             <div className="overflow-x-auto">
-              <table className="table w-full text-sm">
+              <table className="table w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="bg-gray-50 text-gray-700">
                     <th className="text-left">Email</th>
@@ -249,7 +249,7 @@ const AdminDashboard: React.FC = () => {
                 <tbody>
                   {(Array.isArray(users) ? users : []).map((user: any) => (
                     <tr key={user._id || user.id} className="border-b hover:bg-gray-100">
-                      <td className="text-left">{user.email}</td>
+                      <td className="text-left break-words">{user.email}</td>
                       <td className="text-left">{user.fullName || user.name}</td>
                       <td className="text-right">{isNaN(user.balance) ? 0 : user.balance}</td>
                       <td className="text-left">{user.role}</td>
@@ -354,7 +354,7 @@ const AdminDashboard: React.FC = () => {
                       <td className="text-left">
                         {pay.receipt ? (
                           <a href={pay.receipt} target="_blank" rel="noopener noreferrer">
-                            <img src={pay.receipt} alt="Receipt" style={{ maxWidth: 80, maxHeight: 80 }} />
+                            <img src={pay.receipt} alt="Receipt" className="max-w-[80px] max-h-[80px] object-contain" />
                           </a>
                         ) : (
                           <span className="text-gray-400">No receipt</span>
@@ -430,7 +430,7 @@ const AdminDashboard: React.FC = () => {
                 <tbody>
                   {(Array.isArray(trackData) ? trackData : []).map((row: any) => (
                       <tr key={row.id} className={row.totalInvested === 0 && row.currentValue === 0 && row.totalProfit === 0 ? "border-b bg-gray-50" : "border-b hover:bg-gray-100"}>
-                        <td className="px-4 py-2 align-middle font-medium text-left">{row.email || row.name}</td>
+                        <td className="px-4 py-2 align-middle font-medium text-left break-words">{row.email || row.name}</td>
                         <td className="px-4 py-2 align-middle text-right">
                           {isNaN(row.balance) ? 0 : row.balance}
                           <form
@@ -548,8 +548,8 @@ const AdminDashboard: React.FC = () => {
         )}
         {/* Modals */}
         {showViewModal && viewUser && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg min-w-[300px]">
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4 sm:mx-0">
               <h3 className="text-lg font-bold mb-2">User Details</h3>
               <p><b>Email:</b> {viewUser.email}</p>
               <p><b>Name:</b> {viewUser.fullName || viewUser.name}</p>
@@ -559,8 +559,8 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
         {showEditModal && editUser && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg min-w-[300px]">
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4 sm:mx-0">
               <h3 className="text-lg font-bold mb-2">Edit User</h3>
               <label className="block mb-2">Full Name
                 <input className="input input-bordered w-full" value={editForm.fullName} onChange={e => setEditForm(f => ({ ...f, fullName: e.target.value }))} />
@@ -579,8 +579,8 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
         {showResetModal && resetUser && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg min-w-[300px]">
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4">
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md mx-4 sm:mx-0">
               <h3 className="text-lg font-bold mb-2">Reset Password</h3>
               <p><b>User:</b> {resetUser.email}</p>
               <input className="input input-bordered w-full mb-2" type="password" placeholder="New Password" value={resetPassword} onChange={e => setResetPassword(e.target.value)} />
