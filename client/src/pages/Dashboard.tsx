@@ -463,7 +463,9 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             formData.append('currency', fundCurrency);
                             formData.append('method', fundMethod);
                             const token = localStorage.getItem('authToken');
-                            const res = await fetch('/api/payments/user/create', {
+                            // Use backend Render URL for API call
+                            const API_BASE_URL = 'https://novalcapital.onrender.com';
+                            const res = await fetch(`${API_BASE_URL}/api/payments/user/create`, {
                               method: 'POST',
                               body: formData,
                               headers: token ? { 'Authorization': `Bearer ${token}` } : {}
