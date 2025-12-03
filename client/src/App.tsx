@@ -20,16 +20,24 @@ import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [appLoading, setAppLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in
+    // Simulate initial app loading (e.g., fetching user/session, splash)
     const token = localStorage.getItem('authToken');
     setIsAuthenticated(!!token);
+    // Show splash for at least 1s for effect
+    const timer = setTimeout(() => setAppLoading(false), 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return isAuthenticated ? <>{children}</> : <Navigate to="/signin" />;
   };
+
+  if (appLoading) {
+    return <div>Loading...</div>; // Placeholder for loading state
+  }
 
   return (
     <Routes>
