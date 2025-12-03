@@ -422,49 +422,61 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                         className="btn btn-primary w-full"
                         disabled={!fundMethod || !fundAmount || !user?.id}
                         onClick={async () => {
+                          console.log('[FUND WALLET] Continue button clicked');
+                          console.log('Current state:', {
+                            fundMethod,
+                            fundAmount,
+                            fundCurrency,
+                            user,
+                            userId: user?.id,
+                            token: localStorage.getItem('authToken'),
+                          });
                           // Ensure user profile is loaded before payment
                           if (!user?.id) {
                             try {
+                              console.log('[FUND WALLET] userId missing, fetching profile...');
                               const profile = await userAPI.getProfile();
                               setUser(profile);
+                              console.log('[FUND WALLET] Profile fetched:', profile);
                               if (!profile?.id) {
                                 alert('User profile not loaded. Please log in again.');
                                 return;
                               }
                             } catch (err) {
+                              console.error('[FUND WALLET] Error fetching profile:', err);
                               alert('Failed to load user profile. Please log in again.');
                               return;
                             }
                           }
                           // Save payment to backend using FormData
-                          // Removed call to undefined handleFundWalletContinue. If you need extra logic, add it here.
-                          if (!user?.id) return;
+                          if (!user?.id) {
+                            console.error('[FUND WALLET] userId still missing after profile fetch');
+                            return;
+                          }
                           try {
-                            console.log('[FUND WALLET] userId:', user?.id);
+                            console.log('[FUND WALLET] Attempting payment save with userId:', user?.id);
                             const formData = new FormData();
                             formData.append('userId', user?.id);
                             formData.append('amount', fundAmount);
                             formData.append('currency', fundCurrency);
                             formData.append('method', fundMethod);
-                            // Do not require receipt for initial payment save
                             const token = localStorage.getItem('authToken');
                             const res = await fetch('/api/payments/user/create', {
                               method: 'POST',
                               body: formData,
                               headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                             });
+                            console.log('[FUND WALLET] Payment API response:', res);
                             if (res.ok) {
                               setShowFundOverview(true);
                               console.log('[FUND WALLET] Payment saved, showing details page.');
                             } else {
-                              // Always show Payment Details page for user to upload receipt
                               setShowFundOverview(true);
                               const errorText = await res.text();
                               console.error('[FUND WALLET] Payment save failed, but showing details page:', errorText);
                               alert('Failed to save payment. You can still upload your receipt.');
                             }
                           } catch (err) {
-                            // Always show Payment Details page for user to upload receipt
                             setShowFundOverview(true);
                             console.error('[FUND WALLET] Error saving payment, but showing details page:', err);
                             alert('Error saving payment. You can still upload your receipt.');
