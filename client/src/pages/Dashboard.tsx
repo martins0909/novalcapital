@@ -1,4 +1,4 @@
-    // Removed invalid top-level code. All user/profile logic is now inside event handlers or hooks.
+  // ...existing code...
 import TradingViewWidget from '../components/TradingViewWidget';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
