@@ -2,11 +2,11 @@ import React, { useEffect, useRef, memo, useState } from 'react';
 
 function TradingViewWidget() {
   const container = useRef(null);
-  const [height, setHeight] = useState(() => (typeof window !== 'undefined' && window.innerWidth < 640 ? 240 : 550));
+  const [height, setHeight] = useState(() => (typeof window !== 'undefined' && window.innerWidth < 640 ? 180 : 420));
 
   useEffect(() => {
     const handleResize = () => {
-      setHeight(window.innerWidth < 640 ? 240 : 550);
+      setHeight(window.innerWidth < 640 ? 180 : 420);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -107,7 +107,7 @@ function TradingViewWidget() {
         borderRadius: '12px',
         boxShadow: '0 2px 16px rgba(0,0,0,0.12)',
         marginBottom: '24px',
-        minHeight: height < 400 ? '180px' : '300px',
+        minHeight: height < 400 ? '140px' : '260px',
         maxHeight: 'none',
         overflow: 'hidden',
       }}

@@ -11,7 +11,7 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-border">
       <nav className="w-full py-4">
-        <div className="max-w-7xl mx-auto px-0 sm:px-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3">
             <img src="/other-img/logoicon1.png" alt="Company logo" className="h-12 w-12" />
             <span className="font-bold text-xl text-primary">NovalCapitalFX</span>
