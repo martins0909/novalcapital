@@ -50,6 +50,21 @@
   color-scheme: light;
 }
 
+/* Make the UI appear slightly larger on small screens (zoom-in look) while allowing content to reflow vertically */
+@media (max-width: 640px) {
+  :root {
+    font-size: 18px; /* increase base font size for a zoomed-in appearance */
+  }
+  /* Ensure images and widgets do not exceed viewport width */
+  img, .tradingview-widget-container, .tradingview-widget-container * {
+    max-width: 100%;
+    height: auto !important;
+  }
+  /* Make wide tables stack or wrap text instead of overflowing */
+  table { display: block; width: 100%; overflow: visible; }
+  th, td { white-space: normal; word-break: break-word; }
+}
+
 body {
   margin: 0;
   min-height: 100vh;
