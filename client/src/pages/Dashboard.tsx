@@ -190,7 +190,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
         <div className="container mx-auto px-4">
           <div className="flex">
             {/* Sidebar Menu */}
-              <aside className="hidden md:flex flex-col w-64 bg-white rounded-lg shadow-lg mr-8 py-8 px-4">
+            <aside className="hidden md:flex flex-col w-64 bg-white rounded-lg shadow-lg mr-8 py-8 px-4">
               <nav className="space-y-4">
                 <button className="w-full text-left px-4 py-2 rounded hover:bg-gray-100 font-semibold" onClick={() => setActiveTab('overview')}>Dashboard</button>
                 <button className="w-full text-left px-4 py-2 rounded hover:bg-gray-100" onClick={() => setActiveTab('assets')}>Assets</button>
@@ -210,19 +210,6 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                 <button className="w-full text-left px-4 py-2 rounded hover:bg-gray-100" onClick={() => setActiveTab('tradingbots')}>Trading bots</button>
               </nav>
             </aside>
-              {/* Mobile dashboard tab bar - visible only on small screens */}
-              <div className="md:hidden mb-4 px-4">
-                <div className="overflow-x-auto">
-                  <div className="flex space-x-2">
-                    <button onClick={() => setActiveTab('overview')} className={`px-3 py-2 rounded ${activeTab === 'overview' ? 'bg-primary text-white' : 'bg-white border'}`}>Overview</button>
-                    <button onClick={() => setActiveTab('invest')} className={`px-3 py-2 rounded ${activeTab === 'invest' ? 'bg-primary text-white' : 'bg-white border'}`}>Investment Plans</button>
-                    <button onClick={() => setActiveTab('portfolio')} className={`px-3 py-2 rounded ${activeTab === 'portfolio' ? 'bg-primary text-white' : 'bg-white border'}`}>My Portfolio</button>
-                    <button onClick={() => setActiveTab('withdraw')} className={`px-3 py-2 rounded ${activeTab === 'withdraw' ? 'bg-primary text-white' : 'bg-white border'}`}>Withdraw</button>
-                    <button onClick={() => { setActiveTab('fundwallet'); setTimeout(() => { fundWalletRef.current?.scrollIntoView({ behavior: 'smooth' }); }, 100); }} className={`px-3 py-2 rounded ${activeTab === 'fundwallet' ? 'bg-primary text-white' : 'bg-white border'}`}>Fund Wallet</button>
-                    <button onClick={() => setActiveTab('transactions')} className={`px-3 py-2 rounded ${activeTab === 'transactions' ? 'bg-primary text-white' : 'bg-white border'}`}>Transactions</button>
-                  </div>
-                </div>
-              </div>
             {/* Main Dashboard Content */}
             <div className="flex-1" style={{ minHeight: '100vh' }}>
               {/* TradingView Ticker Tape Widget */}
