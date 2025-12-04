@@ -50,12 +50,21 @@
   color-scheme: light;
 }
 
+/* Global zoom-out: reduce base font-size so the whole UI appears smaller */
+:root {
+  font-size: 14px; /* slightly smaller than default */
+}
+
 /* Make the UI appear slightly larger on small screens (zoom-in look) while allowing content to reflow vertically */
 @media (max-width: 640px) {
-  /* Zoom-out: smaller base font size on small screens so more content fits horizontally */
-  :root {
-    font-size: 13px; /* slightly smaller to avoid horizontal cutoff */
-  }
+  /* Aggressive zoom-out on small screens */
+  :root { font-size: 11px; }
+}
+
+/* Zoom-out adjustments for medium screens */
+@media (max-width: 1024px) {
+  :root { font-size: 13px; }
+}
 
   /* Ensure images and widgets do not exceed viewport width */
   img, .tradingview-widget-container, .tradingview-widget-container * {

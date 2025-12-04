@@ -13,8 +13,8 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
       <nav className="w-full py-4">
         <div className="container mx-auto px-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3">
-            <img src="/other-img/logoicon1.png" alt="Company logo" className="h-12 w-12" />
-            <span className="font-bold text-xl text-primary">NovalCapitalFX</span>
+            <img src="/other-img/logoicon1.png" alt="Company logo" className="h-8 w-8" />
+            <span className="font-bold text-lg text-primary">NovalCapitalFX</span>
           </Link>
 
           {/* Desktop Menu */}

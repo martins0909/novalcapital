@@ -227,7 +227,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                 </div>
               </div>
               {/* Stats Cards */}
-              <div className="grid md:grid-cols-4 gap-6 mb-8">
+              <div className="grid md:grid-cols-4 gap-4 mb-6">
                 <div className="card p-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Account Balance</span>
@@ -274,7 +274,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {activeTab === 'overview' && (
                     <div>
                       <h2 className="text-2xl font-bold mb-6">Investment Overview</h2>
-                      <div className="grid md:grid-cols-2 gap-6">
+                      <div className="grid md:grid-cols-2 gap-4">
                         <div>
                           <h3 className="text-lg font-semibold mb-4">Portfolio Distribution</h3>
                           {investments.length > 0 ? (
@@ -319,7 +319,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {activeTab === 'invest' && (
                     <div>
                       <h2 className="text-2xl font-bold mb-6">Choose Your Investment Plan</h2>
-                      <div className="grid md:grid-cols-2 gap-6">
+                      <div className="grid md:grid-cols-2 gap-4">
                         {investmentPlans.map((plan, index) => (
                           <div key={index} className="border rounded-lg p-6 hover:shadow-xl transition">
                             <div className="flex justify-between items-start mb-4">
