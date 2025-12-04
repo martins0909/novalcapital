@@ -182,3 +182,24 @@ h1, h2, h3, h4, h5, h6 {
     @apply text-xl md:text-2xl font-bold mb-6 tracking-tight;
   }
 }
+
+/* Responsive table helpers: make tables align and wrap consistently */
+@layer utilities {
+  .responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* distribute column widths evenly */
+  }
+
+  .responsive-table th, .responsive-table td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal; /* allow wrapping */
+    padding: 0.5rem 0.5rem;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 640px) {
+    .responsive-table th, .responsive-table td { font-size: 0.78rem; padding: 0.4rem 0.4rem; }
+  }
+}

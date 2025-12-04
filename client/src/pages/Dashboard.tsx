@@ -344,28 +344,28 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                       <h2 className="section-heading">My Portfolio</h2>
                       {investments.length > 0 ? (
                         <div className="overflow-x-auto">
-                          <table className="w-full">
+                          <table className="responsive-table">
                             <thead className="bg-gray-50">
                               <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROI</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROI</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                               {investments.map((inv) => (
                                 <tr key={inv.id || inv._id}>
-                                  <td className="px-6 py-4 whitespace-nowrap font-medium">{inv.user?.fullName || inv.user?.email || inv.userId || 'N/A'}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">{inv.planName}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">${inv.investedAmount.toLocaleString()}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">{inv.roi}%</td>
-                                  <td className="px-6 py-4 whitespace-nowrap capitalize">{inv.status}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">{new Date(inv.startDate).toLocaleDateString()}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">{new Date(inv.endDate).toLocaleDateString()}</td>
+                                  <td className="font-medium">{inv.user?.fullName || inv.user?.email || inv.userId || 'N/A'}</td>
+                                  <td>{inv.planName}</td>
+                                  <td>${inv.investedAmount.toLocaleString()}</td>
+                                  <td>{inv.roi}%</td>
+                                  <td className="capitalize">{inv.status}</td>
+                                  <td>{new Date(inv.startDate).toLocaleDateString()}</td>
+                                  <td>{new Date(inv.endDate).toLocaleDateString()}</td>
                                 </tr>
                               ))}
                             </tbody>
@@ -571,36 +571,36 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                     <div>
                       <h2 className="section-heading">Transaction History</h2>
                       {transactions.length > 0 ? (
-                          <div className="overflow-x-auto">
-                            <table className="w-full">
-                              <thead className="bg-gray-50">
-                                <tr>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <div className="overflow-x-auto">
+                          <table className="responsive-table">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {transactions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                                .map((txn, idx) => (
+                                <tr key={txn.id || idx}>
+                                  <td className="text-sm text-gray-600">{new Date(txn.createdAt).toLocaleString()}</td>
+                                  <td>
+                                    <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${txn.type === 'deposit' ? 'bg-blue-100 text-blue-800' : txn.type === 'withdrawal' ? 'bg-yellow-100 text-yellow-800' : txn.type === 'investment' ? 'bg-purple-100 text-purple-800' : txn.type === 'payment' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{txn.type}</span>
+                                  </td>
+                                  <td className="text-sm text-gray-900">{txn.description} {txn.method === 'bitcoin' ? '(Bitcoin)' : txn.method === 'bnb' ? '(TRON)' : ''}</td>
+                                  <td className="font-semibold">${txn.amount?.toLocaleString?.() ?? txn.amount}</td>
+                                  <td>
+                                    <span className={`px-2 py-1 rounded text-xs font-medium ${txn.status === 'completed' ? 'bg-green-100 text-green-800' : txn.status === 'pending' || txn.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>{txn.status === 'pending' || txn.status === 'Pending' ? 'Await Approval' : txn.status}</span>
+                                  </td>
                                 </tr>
-                              </thead>
-                              <tbody className="bg-white divide-y divide-gray-200">
-                                {transactions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                                  .map((txn, idx) => (
-                                  <tr key={txn.id || idx}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{new Date(txn.createdAt).toLocaleString()}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                      <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${txn.type === 'deposit' ? 'bg-blue-100 text-blue-800' : txn.type === 'withdrawal' ? 'bg-yellow-100 text-yellow-800' : txn.type === 'investment' ? 'bg-purple-100 text-purple-800' : txn.type === 'payment' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{txn.type}</span>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">{txn.description} {txn.method === 'bitcoin' ? '(Bitcoin)' : txn.method === 'bnb' ? '(TRON)' : ''}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap font-semibold">${txn.amount?.toLocaleString?.() ?? txn.amount}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                      <span className={`px-2 py-1 rounded text-xs font-medium ${txn.status === 'completed' ? 'bg-green-100 text-green-800' : txn.status === 'pending' || txn.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}>{txn.status === 'pending' || txn.status === 'Pending' ? 'Await Approval' : txn.status}</span>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        ) : (<div className="text-center py-12"><p className="text-gray-600">No transactions or payments yet</p></div>)}
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (<div className="text-center py-12"><p className="text-gray-600">No transactions or payments yet</p></div>)}
                     </div>
                   )}
                 </div>
