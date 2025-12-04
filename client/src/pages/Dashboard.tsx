@@ -273,7 +273,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {/* Overview Tab */}
                   {activeTab === 'overview' && (
                     <div>
-                      <h2 className="text-2xl font-bold mb-6">Investment Overview</h2>
+                      <h2 className="section-heading">Investment Overview</h2>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
                           <h3 className="text-lg font-semibold mb-4">Portfolio Distribution</h3>
@@ -318,7 +318,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {/* Investment Plans Tab */}
                   {activeTab === 'invest' && (
                     <div>
-                      <h2 className="text-2xl font-bold mb-6">Choose Your Investment Plan</h2>
+                      <h2 className="section-heading">Choose Your Investment Plan</h2>
                       <div className="grid md:grid-cols-2 gap-4">
                         {investmentPlans.map((plan, index) => (
                           <div key={index} className="border rounded-lg p-6 hover:shadow-xl transition">
@@ -341,7 +341,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {/* Portfolio Tab */}
                   {activeTab === 'portfolio' && (
                     <div>
-                      <h2 className="text-2xl font-bold mb-6">Investments (Admin View)</h2>
+                      <h2 className="section-heading">My Portfolio</h2>
                       {investments.length > 0 ? (
                         <div className="overflow-x-auto">
                           <table className="w-full">
@@ -377,7 +377,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {/* Withdraw Tab */}
                   {activeTab === 'withdraw' && (
                     <div>
-                      <h2 className="text-2xl font-bold mb-6">Withdraw Funds</h2>
+                      <h2 className="section-heading">Withdraw Funds</h2>
                       {investments.length > 0 ? (
                         <div className="grid md:grid-cols-2 gap-6">
                           {investments.map((inv) => (
@@ -429,7 +429,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   )}
                   {activeTab === 'fundwallet' && showFundOverview && (
                     <div className="max-w-lg mx-auto">
-                      <h2 className="text-2xl font-bold mb-4">PAYMENT DETAILS</h2>
+                      <h2 className="section-heading">PAYMENT DETAILS</h2>
                       <div className="flex justify-between items-center mb-4">
                         <span className="font-semibold">Upload payment receipt</span>
                         <input
@@ -539,7 +539,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   {/* Account Verification Tab */}
                   {activeTab === 'verification' && (
                     <div className="max-w-md mx-auto">
-                      <h2 className="text-2xl font-bold mb-6">Account Verification</h2>
+                      <h2 className="section-heading">Account Verification</h2>
                       <label className="block mb-2 font-medium">Select Document Type</label>
                       <div className="relative mb-4">
                         <select value={verificationType} onChange={e => setVerificationType(e.target.value)} className="w-full px-4 py-2 border rounded appearance-none">
@@ -569,7 +569,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                   )}
                   {activeTab === 'transactions' && (
                     <div>
-                      <h2 className="text-2xl font-bold mb-6">Transaction History</h2>
+                      <h2 className="section-heading">Transaction History</h2>
                       {transactions.length > 0 ? (
                           <div className="overflow-x-auto">
                             <table className="w-full">

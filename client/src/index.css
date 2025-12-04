@@ -176,4 +176,9 @@ h1, h2, h3, h4, h5, h6 {
   .badge-down {
     @apply bg-red-500 text-white px-2 py-1 rounded text-sm;
   }
+
+  /* Standard section heading used across dashboard pages */
+  .section-heading {
+    @apply text-xl md:text-2xl font-bold mb-6 tracking-tight;
+  }
 }
