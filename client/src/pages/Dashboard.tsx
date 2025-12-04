@@ -259,14 +259,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
               {/* Tabs and Tab Content */}
               <div className="card">
                 <div className="border-b border-gray-200">
-                  <nav className="flex space-x-8 px-6">
-                    <button onClick={() => setActiveTab('verification')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'verification' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Account Verification</button>
-                    <button onClick={() => setActiveTab('overview')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Overview</button>
-                    <button onClick={() => setActiveTab('invest')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'invest' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Investment Plans</button>
-                    <button onClick={() => setActiveTab('portfolio')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'portfolio' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>My Portfolio</button>
-                    <button onClick={() => setActiveTab('withdraw')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'withdraw' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Withdraw</button>
-                    <button onClick={() => setActiveTab('fundwallet')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'fundwallet' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Fund Wallet</button>
-                    <button onClick={() => setActiveTab('transactions')} className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'transactions' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Transactions</button>
+                  <nav className="dashboard-tabs-nav px-0">
+                    <button onClick={() => setActiveTab('verification')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'verification' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Account Verification</button>
+                    <button onClick={() => setActiveTab('overview')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Overview</button>
+                    <button onClick={() => setActiveTab('invest')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'invest' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Investment Plans</button>
+                    <button onClick={() => setActiveTab('portfolio')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'portfolio' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>My Portfolio</button>
+                    <button onClick={() => setActiveTab('withdraw')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'withdraw' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Withdraw</button>
+                    <button onClick={() => setActiveTab('fundwallet')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'fundwallet' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Fund Wallet</button>
+                    <button onClick={() => setActiveTab('transactions')} className={`py-3 px-2 border-b-2 font-medium text-sm ${activeTab === 'transactions' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Transactions</button>
                   </nav>
                 </div>
                 <div className="p-6">

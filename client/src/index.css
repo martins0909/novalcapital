@@ -61,6 +61,13 @@
   :root { font-size: 11px; }
 }
 
+/* Ensure container spans full width on small screens so header/widget/footer align with dashboard tabs */
+@media (max-width: 640px) {
+  .container { max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+  .dashboard-tabs-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .dashboard-tabs-nav button { flex: 1 1 auto; text-align: center; padding: 0.5rem 0.75rem; }
+}
+
 /* Zoom-out adjustments for medium screens */
 @media (max-width: 1024px) {
   :root { font-size: 13px; }
