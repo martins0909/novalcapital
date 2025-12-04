@@ -10,8 +10,8 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-border">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+      <nav className="w-full py-4">
+        <div className="max-w-7xl mx-auto px-0 sm:px-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3">
             <img src="/other-img/logoicon1.png" alt="Company logo" className="h-12 w-12" />
             <span className="font-bold text-xl text-primary">NovalCapitalFX</span>
@@ -69,7 +69,7 @@ const Header = ({ isAuthenticated }: HeaderProps) => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t pt-4">
+          <div className="lg:hidden mt-4 pb-4 border-t pt-4 px-0">
             <Link to="/" className="block py-2 text-gray-700 hover:text-primary">Home</Link>
             <Link to="/markets" className="block py-2 text-gray-700 hover:text-primary">Markets</Link>
             <Link to="/about" className="block py-2 text-gray-700 hover:text-primary">About</Link>

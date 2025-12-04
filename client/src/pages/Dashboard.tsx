@@ -692,9 +692,9 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
         </div>
       </main>
       {/* TradingView Market Overview Widget at bottom */}
-      <div className="mt-8 mb-6 px-4 sm:px-0">
-        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4">Market Overview</h2>
-        <div className="max-w-7xl mx-auto px-2">
+      <div className="mt-8 mb-6 w-full">
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-4 px-4 sm:px-0">Market Overview</h2>
+        <div className="w-full px-0">
           <TradingViewWidget />
         </div>
       </div>
