@@ -184,7 +184,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
   };
   // All logic and functions above
   return (
-    <div className="min-h-screen flex flex-col bg-light-lighter">
+    <div className="min-h-screen flex flex-col bg-light-lighter overflow-x-hidden">
       <Header isAuthenticated={true} />
       <main className="flex-grow py-8">
         <div className="container mx-auto px-4">
