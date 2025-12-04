@@ -52,9 +52,9 @@
 
 /* Make the UI appear slightly larger on small screens (zoom-in look) while allowing content to reflow vertically */
 @media (max-width: 640px) {
-  /* Reduce base font size on small screens so more content fits horizontally */
+  /* Zoom-out: smaller base font size on small screens so more content fits horizontally */
   :root {
-    font-size: 14px; /* smaller than desktop to avoid overflow */
+    font-size: 13px; /* slightly smaller to avoid horizontal cutoff */
   }
 
   /* Ensure images and widgets do not exceed viewport width */
@@ -64,19 +64,19 @@
   }
 
   /* Make wide tables wrap text instead of overflowing and reduce font-size slightly */
-  table { display: block; width: 100%; overflow: visible; font-size: 0.9rem; }
+  table { display: block; width: 100%; overflow: visible; font-size: 0.85rem; }
   th, td { white-space: normal; word-break: break-word; }
 
   /* Reduce card padding on mobile to free up space */
-  .card { padding: 1rem; }
+  .card { padding: 0.75rem; }
 
   /* Tighter buttons on mobile */
-  .btn { padding-left: 0.75rem; padding-right: 0.75rem; padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 0.9rem; }
+  .btn { padding-left: 0.5rem; padding-right: 0.5rem; padding-top: 0.4rem; padding-bottom: 0.4rem; font-size: 0.85rem; }
 
   /* Headings scale down on mobile for better balance */
-  h1 { font-size: 1.25rem; }
-  h2 { font-size: 1.125rem; }
-  h3 { font-size: 1rem; }
+  h1 { font-size: 1.125rem; }
+  h2 { font-size: 1rem; }
+  h3 { font-size: 0.95rem; }
 }
 
 body {
