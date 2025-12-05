@@ -2,12 +2,24 @@ const User = require('../models/User');
 // Create a new payment (Fund Wallet form)
 router.post('/user/create', async (req, res) => {
   try {
+    // Debug: log incoming body to help diagnose production issues
+    console.log('[PAYMENTS] /user/create body:', req.body);
     const { userId, amount, currency, method } = req.body;
-    if (!userId || !amount || !currency || !method) return res.status(400).json({ error: 'Missing required fields' });
+    if (!userId || !amount || !currency || !method) {
+      console.warn('[PAYMENTS] /user/create missing fields:', { userId, amount, currency, method });
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
     const payment = new Payment({ userId, amount, currency, method, status: 'pending' });
-    await payment.save();
-    res.json(payment);
+    try {
+      await payment.save();
+      console.log('[PAYMENTS] Created payment:', payment._id);
+      return res.json(payment);
+    } catch (saveErr) {
+      console.error('[PAYMENTS] Error saving payment:', saveErr);
+      return res.status(500).json({ error: saveErr.message });
+    }
   } catch (err) {
+    console.error('[PAYMENTS] Unexpected error in /user/create:', err);
     res.status(500).json({ error: err.message });
   }
 });
