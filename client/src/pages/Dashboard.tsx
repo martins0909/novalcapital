@@ -432,17 +432,20 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                              return;
                            }
                            try {
-                             const fd = new FormData();
-                             fd.append('amount', String(fundAmount));
-                             fd.append('currency', fundCurrency);
-                             fd.append('method', fundMethod);
-                             // Include userId so server can create payment for correct user
-                             if (user?._id) fd.append('userId', String(user._id));
+                             const payload = {
+                               amount: Number(fundAmount),
+                               currency: fundCurrency,
+                               method: fundMethod,
+                               userId: user?._id || undefined,
+                             };
                              const token = localStorage.getItem('authToken');
                              const res = await fetch('/api/payments/user/create', {
                                method: 'POST',
-                               body: fd,
-                               headers: token ? { Authorization: `Bearer ${token}` } : undefined
+                               headers: {
+                                 'Content-Type': 'application/json',
+                                 ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                               },
+                               body: JSON.stringify(payload),
                              });
                              if (res.ok) {
                                // Payment created successfully (pending). Save id (if returned) and show details for receipt upload
