@@ -420,9 +420,41 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                       <input type="number" value={fundAmount} onChange={e => setFundAmount(e.target.value)} className="w-full mb-4 px-4 py-2 border rounded" placeholder="Enter amount" />
                        <button
                          className="btn btn-primary w-full"
-                         onClick={() => {
-                           // Only show Payment Details page, no payment save or debug
-                           setShowFundOverview(true);
+                         onClick={async () => {
+                           // Create a pending payment on the server, then show Payment Details
+                           if (!fundMethod) {
+                             alert('Please select a payment method');
+                             return;
+                           }
+                           if (!fundAmount || Number(fundAmount) <= 0) {
+                             alert('Please enter a valid amount');
+                             return;
+                           }
+                           try {
+                             const fd = new FormData();
+                             fd.append('amount', String(fundAmount));
+                             fd.append('currency', fundCurrency);
+                             fd.append('method', fundMethod);
+                             const token = localStorage.getItem('authToken');
+                             const res = await fetch('/api/payments/user/create', {
+                               method: 'POST',
+                               body: fd,
+                               headers: token ? { Authorization: `Bearer ${token}` } : undefined
+                             });
+                             if (res.ok) {
+                               // Payment created successfully (pending). Show details for receipt upload
+                               setShowFundOverview(true);
+                             } else {
+                               const txt = await res.text();
+                               console.error('[FUND WALLET] Payment create failed:', txt);
+                               alert('Failed to create payment. You can still upload your receipt.');
+                               setShowFundOverview(true);
+                             }
+                           } catch (err) {
+                             console.error('[FUND WALLET] Error creating payment:', err);
+                             alert('Error creating payment. You can still upload your receipt.');
+                             setShowFundOverview(true);
+                           }
                          }}
                        >Continue</button>
                     </div>
@@ -500,7 +532,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                             const paymentsRes = await fetch(`/payments/user/all?userId=${user?._id}`);
                             const paymentsData = paymentsRes.ok ? await paymentsRes.json() : [];
                             const latestPayment = paymentsData
-                              .filter((p: any) => p.amount == fundAmount && p.method === fundMethod && p.status === 'pending')
+                              .filter((p: any) => p.amount == fundAmount && p.method === fundMethod && (p.status && String(p.status).toLowerCase() === 'pending'))
                               .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
                             if (!latestPayment) {
                               alert('No matching payment found.');
