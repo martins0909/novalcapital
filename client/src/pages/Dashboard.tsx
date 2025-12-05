@@ -519,8 +519,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                                 })
                               });
                               if (res.ok) {
-                                alert('Receipt uploaded! Awaiting admin confirmation.');
-                                alert('complete!');
+                                alert('Congratulations! Payment successful, wait for admin approval');
                                 setShowFundOverview(false);
                                 navigate('/dashboard');
                               } else {
