@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { loadTawk, unloadTawk } from '../utils/tawk';
 import { marketAPI } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -27,6 +28,15 @@ const Home = () => {
     load();
     const id = setInterval(load, 30000);
     return () => { mounted = false; clearInterval(id); };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname)) {
+      loadTawk('693279e5cf610a197f635280/1jbmioato');
+    }
+    return () => {
+      unloadTawk();
+    };
   }, []);
 
   // Hero slider images (served from /public)

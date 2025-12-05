@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useEffect, useRef, useState } from 'react';
+import { loadTawk, unloadTawk } from '../utils/tawk';
 
 const About = () => {
   const [counts, setCounts] = useState({ users: 0, instruments: 0, countries: 0 });
@@ -26,6 +27,15 @@ const About = () => {
 
     return () => observer.disconnect();
   }, [hasAnimated]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname)) {
+      loadTawk('693279e5cf610a197f635280/1jbmioato');
+    }
+    return () => {
+      unloadTawk();
+    };
+  }, []);
 
   const animateCounters = () => {
     const targets = { users: 3000000, instruments: 40000, countries: 190 };

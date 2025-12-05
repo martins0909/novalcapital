@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { loadTawk, unloadTawk } from '../utils/tawk';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,15 @@ const Contact = () => {
       setFormData({ name: '', email: '', subject: '', message: '' });
     }, 3000);
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname)) {
+      loadTawk('693279e5cf610a197f635280/1jbmioato');
+    }
+    return () => {
+      unloadTawk();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-light-lighter">
