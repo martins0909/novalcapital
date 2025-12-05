@@ -535,6 +535,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                       <button
                         className="btn btn-primary w-full mb-2"
                         onClick={async () => {
+                          // Show immediate popup informing user the payment is successful and to chat with agent
+                          try {
+                            // Immediate user-facing popup
+                            alert('payment successful! await admin confirmation. chat with our online agent.');
+                          } catch (e) {
+                            // ignore alert errors
+                          }
+
                           // Upload receipt to backend
                           try {
                             if (!fundReceipt) {
@@ -569,7 +577,6 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                                 })
                               });
                               if (res.ok) {
-                                alert('Congratulations! Payment successful, wait for admin approval');
                                 // Clear createdPaymentId and return to dashboard
                                 setCreatedPaymentId(null);
                                 setShowFundOverview(false);
