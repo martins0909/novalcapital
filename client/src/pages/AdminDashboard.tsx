@@ -367,13 +367,15 @@ const AdminDashboard: React.FC = () => {
                               className="btn btn-xs btn-success mr-2"
                               onClick={async () => {
                                 try {
-                                  const res = await fetch('/api/payments/admin/confirm', {
+                                  const res = await fetch(`${API_BASE_URL}/api/payments/admin/${pay._id || pay.id}/confirm`, {
                                     method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ paymentId: pay._id || pay.id })
+                                    headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
                                   });
                                   if (res.ok) {
                                     alert('Payment confirmed and balance updated!');
+                                    // refresh payments list
+                                    const list = await (await fetch(`${API_BASE_URL}/api/payments/admin/all`, { headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` } })).json();
+                                    setPayments(Array.isArray(list) ? list : []);
                                   } else {
                                     alert('Failed to confirm payment.');
                                   }
@@ -386,13 +388,15 @@ const AdminDashboard: React.FC = () => {
                               className="btn btn-xs btn-error"
                               onClick={async () => {
                                 try {
-                                  const res = await fetch('/api/payments/admin/decline', {
+                                  const res = await fetch(`${API_BASE_URL}/api/payments/admin/${pay._id || pay.id}/reject`, {
                                     method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ paymentId: pay._id || pay.id })
+                                    headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
                                   });
                                   if (res.ok) {
                                     alert('Payment declined.');
+                                    // refresh payments list
+                                    const list = await (await fetch(`${API_BASE_URL}/api/payments/admin/all`, { headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` } })).json();
+                                    setPayments(Array.isArray(list) ? list : []);
                                   } else {
                                     alert('Failed to decline payment.');
                                   }
