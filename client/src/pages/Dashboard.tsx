@@ -59,6 +59,7 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
   const fundWalletRef = useRef<HTMLDivElement>(null);
   const [fundCurrency, setFundCurrency] = useState<'dollars' | 'euro' | 'pound'>('dollars');
   const [fundReceipt, setFundReceipt] = useState<File | null>(null);
+  const [createdPaymentId, setCreatedPaymentId] = useState<string | null>(null);
 
   // Payment method and form fields for Withdraw modal
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -435,6 +436,8 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                              fd.append('amount', String(fundAmount));
                              fd.append('currency', fundCurrency);
                              fd.append('method', fundMethod);
+                             // Include userId so server can create payment for correct user
+                             if (user?._id) fd.append('userId', String(user._id));
                              const token = localStorage.getItem('authToken');
                              const res = await fetch('/api/payments/user/create', {
                                method: 'POST',
@@ -442,7 +445,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                                headers: token ? { Authorization: `Bearer ${token}` } : undefined
                              });
                              if (res.ok) {
-                               // Payment created successfully (pending). Show details for receipt upload
+                               // Payment created successfully (pending). Save id (if returned) and show details for receipt upload
+                               try {
+                                 const json = await res.json();
+                                 const id = json && (json._id || json.id || (json.payment && (json.payment._id || json.payment.id)));
+                                 if (id) setCreatedPaymentId(String(id));
+                               } catch (e) {
+                                 // ignore parse errors; proceed to show details
+                               }
                                setShowFundOverview(true);
                              } else {
                                const txt = await res.text();
@@ -528,15 +538,20 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                               alert('Please upload a receipt.');
                               return;
                             }
-                            // Find the latest payment for this user and amount
-                            const paymentsRes = await fetch(`/payments/user/all?userId=${user?._id}`);
-                            const paymentsData = paymentsRes.ok ? await paymentsRes.json() : [];
-                            const latestPayment = paymentsData
-                              .filter((p: any) => p.amount == fundAmount && p.method === fundMethod && (p.status && String(p.status).toLowerCase() === 'pending'))
-                              .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
-                            if (!latestPayment) {
-                              alert('No matching payment found.');
-                              return;
+                            // Determine paymentId: prefer the freshly created id saved earlier
+                            let paymentIdToUse: string | null = createdPaymentId;
+                            if (!paymentIdToUse) {
+                              // Fallback: find the latest payment for this user and amount
+                              const paymentsRes = await fetch(`/payments/user/all?userId=${user?._id}`);
+                              const paymentsData = paymentsRes.ok ? await paymentsRes.json() : [];
+                              const latestPayment = paymentsData
+                                .filter((p: any) => p.amount == fundAmount && p.method === fundMethod && (p.status && String(p.status).toLowerCase() === 'pending'))
+                                .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+                              if (!latestPayment) {
+                                alert('No matching payment found.');
+                                return;
+                              }
+                              paymentIdToUse = latestPayment._id || latestPayment.id;
                             }
                             // Upload receipt (simulate file upload as base64 string)
                             const reader = new FileReader();
@@ -546,12 +561,14 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
-                                  paymentId: latestPayment._id || latestPayment.id,
+                                  paymentId: paymentIdToUse,
                                   receipt: base64Receipt
                                 })
                               });
                               if (res.ok) {
                                 alert('Congratulations! Payment successful, wait for admin approval');
+                                // Clear createdPaymentId and return to dashboard
+                                setCreatedPaymentId(null);
                                 setShowFundOverview(false);
                                 navigate('/dashboard');
                               } else {
