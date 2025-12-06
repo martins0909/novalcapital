@@ -81,7 +81,7 @@ const Home = () => {
       <main className="flex-grow">
         {/* Hero Section - Image Slider with Overlay Text */}
         <section
-          className="relative h-[520px] md:h-[640px]"
+          className="relative h-[420px] md:h-[640px] overflow-hidden"
           role="region"
           aria-roledescription="carousel"
           aria-label="Hero slideshow"
@@ -175,7 +175,7 @@ const Home = () => {
           </button>
 
           {/* Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 z-30 bottom-8 md:bottom-4">
             {slides.map((_, idx) => (
               <button
                 key={idx}
@@ -190,7 +190,7 @@ const Home = () => {
         </section>
 
         {/* Price Ticker */}
-        <section className="bg-transparent md:bg-gray-200 -mt-1 md:mt-0 py-1 md:py-3">
+        <section className="bg-transparent md:bg-gray-200 mt-0 py-1 md:py-3">
           <div className="container mx-auto px-4">
             <div className="ticker" aria-label="Live market prices" role="region">
               <div className="ticker__track">
