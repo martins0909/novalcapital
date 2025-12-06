@@ -28,14 +28,7 @@ const About = () => {
     return () => observer.disconnect();
   }, [hasAnimated]);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname)) {
-      loadTawk('693279e5cf610a197f635280/1jbmioato');
-    }
-    return () => {
-      unloadTawk();
-    };
-  }, []);
+  // Tawk is loaded globally from App.tsx; do not unload on page unmount so widget stays persistent.
 
   const animateCounters = () => {
     const targets = { users: 3000000, instruments: 40000, countries: 190 };

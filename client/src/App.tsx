@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { loadTawk } from './utils/tawk';
 import Home from './pages/Home';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -28,6 +29,11 @@ function App() {
     setIsAuthenticated(!!token);
     // Show splash for at least 1s for effect
     const timer = setTimeout(() => setAppLoading(false), 1000);
+    // Load Tawk once for the whole SPA (skip on localhost)
+    if (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname)) {
+      // widget id/path (same value used in pages)
+      loadTawk('693279e5cf610a197f635280/1jbmioato');
+    }
     return () => clearTimeout(timer);
   }, []);
 

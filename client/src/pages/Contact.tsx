@@ -30,14 +30,7 @@ const Contact = () => {
     }, 3000);
   };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname)) {
-      loadTawk('693279e5cf610a197f635280/1jbmioato');
-    }
-    return () => {
-      unloadTawk();
-    };
-  }, []);
+  // Tawk is loaded globally from App.tsx; do not unload on page unmount so widget stays persistent.
 
   return (
     <div className="min-h-screen flex flex-col bg-light-lighter">
