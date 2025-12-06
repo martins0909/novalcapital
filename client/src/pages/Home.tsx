@@ -190,7 +190,7 @@ const Home = () => {
         </section>
 
         {/* Price Ticker */}
-        <section className="bg-gray-200 py-3">
+        <section className="bg-transparent md:bg-gray-200 -mt-1 md:mt-0 py-1 md:py-3">
           <div className="container mx-auto px-4">
             <div className="ticker" aria-label="Live market prices" role="region">
               <div className="ticker__track">
