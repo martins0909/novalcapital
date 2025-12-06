@@ -466,15 +466,48 @@ const AdminDashboard: React.FC = () => {
                               }
                             }}
                           >
-                            <input
-                              type="number"
-                              name="amount"
-                              placeholder="Amount"
-                              className="input input-xs w-20 mr-1"
-                              min="-1000000"
-                              max="1000000"
-                            />
-                            <button type="submit" className="btn btn-xs btn-primary">Add</button>
+                              <input
+                                type="number"
+                                id={`balance-input-${row.id}`}
+                                name="amount"
+                                placeholder="Amount"
+                                className="input input-xs w-20 mr-1"
+                                min="-1000000"
+                                max="1000000"
+                              />
+                              <button type="submit" className="btn btn-xs btn-primary">Add</button>
+                              <button
+                                type="button"
+                                className="ml-1 btn btn-xs btn-error"
+                                onClick={async () => {
+                                  try {
+                                    const input = document.getElementById(`balance-input-${row.id}`) as HTMLInputElement | null;
+                                    if (!input) return;
+                                    const val = Number(input.value);
+                                    if (isNaN(val) || val === 0) {
+                                      alert('Enter a valid amount to subtract');
+                                      return;
+                                    }
+                                    const amount = -Math.abs(val);
+                                    const res = await axios.post(`${API_BASE_URL}/api/users/admin/${row.id}/balance`, { amount }, {
+                                      headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+                                    });
+                                    // Update UI with returned balance
+                                    setTrackData(prev => prev.map(r => r.id === row.id ? { ...r, balance: res.data.balance } : r));
+                                    setTrackRawInvestments((prev: any) => ({
+                                      ...prev,
+                                      [row.id]: {
+                                        ...prev[row.id],
+                                        balance: res.data.balance
+                                      }
+                                    }));
+                                    setUsers((prev: any[]) => prev.map(u => (u._id === row.id || u.id === row.id) ? { ...u, balance: res.data.balance } : u));
+                                    input.value = '';
+                                  } catch (err) {
+                                    alert('Failed to subtract balance');
+                                  }
+                                }}
+                              >-</button>
                           </form>
                         </td>
                         <td className="px-4 py-2 align-middle text-right">${isNaN(row.totalInvested) ? 0 : row.totalInvested.toFixed(2)}
