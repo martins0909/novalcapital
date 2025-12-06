@@ -81,7 +81,7 @@ const Home = () => {
       <main className="flex-grow">
         {/* Hero Section - Image Slider with Overlay Text */}
         <section
-          className="relative h-[420px] md:h-[640px] overflow-hidden"
+          className="relative h-[420px] md:h-[640px] overflow-hidden bg-black"
           role="region"
           aria-roledescription="carousel"
           aria-label="Hero slideshow"
@@ -120,7 +120,7 @@ const Home = () => {
                 aria-roledescription="slide"
                 aria-label={`${idx + 1} of ${slides.length}`}
                 aria-hidden={idx !== currentSlide}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${idx === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-opacity duration-700 ${idx === currentSlide ? 'opacity-100' : 'opacity-0'}`}
               />
             ))}
             {/* subtle gradient for contrast */}
