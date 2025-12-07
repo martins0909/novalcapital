@@ -11,7 +11,7 @@ router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
     const userId = req.userId;
     console.log('[PROFILE] Token:', token);
     console.log('[PROFILE] userId:', userId);
-    const user = await User.findById(userId).select('id email fullName balance createdAt');
+    const user = await User.findById(userId).select('id email fullName balance referralCode referralEarnings createdAt');
     if (!user) {
       console.log('[PROFILE] User not found for userId:', userId);
       return res.status(404).json({ error: 'User not found' });

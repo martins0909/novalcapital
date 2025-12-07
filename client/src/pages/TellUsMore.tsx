@@ -21,6 +21,10 @@ const TellUsMore: React.FC = () => {
     zipCode: ""
   });
 
+  // Get user data from localStorage
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const referralCode = user.referralCode;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -45,6 +49,13 @@ const TellUsMore: React.FC = () => {
                   <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold text-gray-800 mb-2">Tell us more about yourself</h2>
                     <p className="text-gray-600">make your trading journey easy and fun!</p>
+                    {referralCode && (
+                      <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-md">
+                        <p className="text-green-800 font-semibold">Your Referral Code:</p>
+                        <p className="text-green-600 text-lg font-mono">{referralCode}</p>
+                        <p className="text-sm text-green-700 mt-1">Share this code to earn $5 for each successful referral!</p>
+                      </div>
+                    )}
                   </div>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>

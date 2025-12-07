@@ -314,6 +314,39 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                           </div>
                         </div>
                       </div>
+                      {/* Referral Code Section */}
+                      <div className="mt-8">
+                        <h3 className="text-lg font-semibold mb-4">Referral Program</h3>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <p className="text-gray-600 mb-2">Share your referral code to earn $5 for each successful signup!</p>
+                          <div className="flex items-center gap-4">
+                            <div className="flex-1">
+                              <label className="block text-sm font-medium text-gray-700 mb-1">Your Referral Code</label>
+                              <div className="flex">
+                                <input
+                                  type="text"
+                                  value={user?.referralCode || 'Loading...'}
+                                  readOnly
+                                  className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md bg-white"
+                                />
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(user?.referralCode || '');
+                                    alert('Referral code copied to clipboard!');
+                                  }}
+                                  className="px-4 py-2 bg-primary text-white rounded-r-md hover:bg-primary-dark"
+                                >
+                                  Copy
+                                </button>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm text-gray-600">Earnings</div>
+                              <div className="text-xl font-bold text-green-600">${user?.referralEarnings || 0}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                   {/* Investment Plans Tab */}
