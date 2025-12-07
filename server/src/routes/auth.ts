@@ -89,6 +89,7 @@ const isValidPassword = (password: string): { valid: boolean; message?: string }
 router.post('/register', async (req: Request, res: Response) => {
   try {
     const { email, password, fullName, role, referralCode } = req.body;
+    console.log('[REGISTER] Request:', { email, fullName, referralCode });
 
     if (!email || !password || !fullName) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -115,6 +116,7 @@ router.post('/register', async (req: Request, res: Response) => {
     let referrer = null;
     if (referralCode) {
       referrer = await User.findOne({ referralCode });
+      console.log('[REGISTER] Referrer found:', referrer ? referrer.email : 'none');
       if (!referrer) {
         return res.status(400).json({ error: 'Invalid referral code' });
       }
@@ -122,6 +124,7 @@ router.post('/register', async (req: Request, res: Response) => {
       referrer.referralEarnings += 5;
       referrer.accountBalance += 5;
       await referrer.save();
+      console.log('[REGISTER] Referrer updated:', referrer.email, 'earnings:', referrer.referralEarnings);
     }
 
     const user = await User.create({
@@ -132,6 +135,7 @@ router.post('/register', async (req: Request, res: Response) => {
       referralCode: newReferralCode,
       referredBy: referrer ? referrer._id : null
     });
+    console.log('[REGISTER] New user created:', user.email, 'code:', user.referralCode);
 
     const token = jwt.sign(
       { userId: user._id.toString(), email: user.email, role: user.role },

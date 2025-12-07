@@ -613,10 +613,11 @@ const AdminDashboard: React.FC = () => {
                 </thead>
                 <tbody>
                   {(Array.isArray(referrals) ? referrals : []).map((row: any) => (
-                    <tr key={row.userId} className="border-b hover:bg-gray-100">
-                      <td className="px-4 py-2 align-middle font-medium text-left break-words">{row.userFullName} ({row.userEmail})</td>
+                    <tr key={row._id} className="border-b hover:bg-gray-100">
+                      <td className="px-4 py-2 align-middle font-medium text-left break-words">{row.fullName || row.email}</td>
+                      <td className="px-4 py-2 align-middle">{row.referralCode || 'N/A'}</td>
                       <td className="px-4 py-2 align-middle text-right">{row.referralsCount}</td>
-                      <td className="px-4 py-2 align-middle text-right">${row.totalEarnings.toFixed(2)}</td>
+                      <td className="px-4 py-2 align-middle text-right">${(row.referralEarnings || 0).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>

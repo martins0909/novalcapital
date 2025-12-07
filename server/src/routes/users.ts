@@ -17,6 +17,7 @@ router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
       console.log('[PROFILE] User not found for userId:', userId);
       return res.status(404).json({ error: 'User not found' });
     }
+    console.log('[PROFILE] User:', user.email, 'code:', user.referralCode, 'earnings:', user.referralEarnings);
     // Generate referral code if missing
     if (!user.referralCode) {
       let newReferralCode;
@@ -25,6 +26,7 @@ router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
       } while (await User.findOne({ referralCode: newReferralCode }));
       user.referralCode = newReferralCode;
       await user.save();
+      console.log('[PROFILE] Generated referral code for user:', userId, newReferralCode);
     }
     console.log('[PROFILE] User found:', user);
     res.json(user);
@@ -115,15 +117,16 @@ router.post('/admin/:id/balance', authMiddleware, async (req: Request, res: Resp
 router.get('/admin/referrals', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
-    const users = await User.find({}).select('id email fullName referralEarnings');
+    const users = await User.find({ referralCode: { $exists: true } }).select('email fullName referralCode referralEarnings');
     const referrals = await Promise.all(users.map(async (user) => {
-      const referredCount = await User.countDocuments({ referredBy: user._id });
+      const referralsCount = await User.countDocuments({ referredBy: user._id });
       return {
-        userId: user._id,
-        userEmail: user.email,
-        userFullName: user.fullName,
-        referralsCount: referredCount,
-        totalEarnings: user.referralEarnings
+        _id: user._id,
+        email: user.email,
+        fullName: user.fullName,
+        referralCode: user.referralCode,
+        referralsCount,
+        referralEarnings: user.referralEarnings
       };
     }));
     res.json(referrals);

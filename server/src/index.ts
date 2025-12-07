@@ -11,6 +11,8 @@ import transactionRoutes from './routes/transactions';
 import marketRoutes from './routes/market';
 import paymentsRoutes from './routes/payments';
 import { updateInvestmentValues, checkInvestmentMaturity } from './utils/investmentCalculator';
+import WebSocket from 'ws';
+import http from 'http';
 
 dotenv.config();
 connectDB();
@@ -27,6 +29,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     'http://localhost:3000',
+    'http://localhost:3002',
     'https://novalcapital.vercel.app',
     'https://novalcapital.org'
   ],
@@ -88,7 +91,27 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
+// Create HTTP server
+const server = http.createServer(app);
+
+// WebSocket server
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws, req) => {
+  console.log('WebSocket client connected from', req.url);
+
+  ws.on('message', (message) => {
+    console.log('Received:', message.toString());
+    // Echo back for now
+    ws.send('Hello from server');
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket client disconnected');
+  });
+});
+
+server.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   
   // Start investment growth simulator (runs every 30 seconds)
@@ -98,6 +121,9 @@ app.listen(PORT, () => {
   }, 30000);
   
   console.log('📈 Investment growth simulator started');
+  console.log('🔌 WebSocket server running on the same port');
 });
+
+console.log('🔌 WebSocket server running on port 8080');
 
 export default app;

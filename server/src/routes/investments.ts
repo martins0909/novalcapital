@@ -16,6 +16,20 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
+// Get investments for a specific user (admin only)
+router.get('/user/:userId', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    if (req.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    const userId = req.params.userId;
+    const investments = await Investment.find({ userId }).sort({ createdAt: -1 });
+    res.json(investments);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch investments' });
+  }
+});
+
 // Create new investment
 router.post('/', authMiddleware, async (req: Request, res: Response) => {
   try {

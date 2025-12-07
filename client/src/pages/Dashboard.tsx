@@ -120,6 +120,8 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
         // Load user profile and balance from backend
         const profile = await userAPI.getProfile();
         setUser(profile);
+        localStorage.setItem('user', JSON.stringify(profile));
+        console.log('[DASHBOARD] Profile loaded:', profile);
         setBalance(profile.balance || 0);
 
         // Load investments (user view)
