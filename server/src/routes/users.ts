@@ -57,7 +57,6 @@ router.get('/stats', authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
-export default router;
 // Admin: Get all users
 router.get('/admin/all', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
@@ -118,7 +117,7 @@ router.get('/admin/referrals', authMiddleware, async (req: Request, res: Respons
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const users = await User.find({ referralCode: { $exists: true } }).select('email fullName referralCode referralEarnings');
-    const referrals = await Promise.all(users.map(async (user) => {
+    const referrals = await Promise.all(users.map(async (user: any) => {
       const referralsCount = await User.countDocuments({ referredBy: user._id });
       return {
         _id: user._id,
