@@ -38,7 +38,7 @@ interface Investment {
 
 const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem('user') || 'null'));
   const [activeTab, setActiveTab] = useState<
     'overview' | 'invest' | 'portfolio' | 'withdraw' | 'transactions' | 'fundwallet' | 'assets' | 'stocks' | 'activities' | 'tradingbots' | 'verification'
   >('overview');

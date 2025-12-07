@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 const User = require('../models/User');
 import { authMiddleware } from '../middleware/auth';
+import crypto from 'crypto';
 
 const router = Router();
 
@@ -11,10 +12,19 @@ router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
     const userId = req.userId;
     console.log('[PROFILE] Token:', token);
     console.log('[PROFILE] userId:', userId);
-    const user = await User.findById(userId).select('id email fullName balance referralCode referralEarnings createdAt');
+    let user = await User.findById(userId).select('id email fullName balance referralCode referralEarnings createdAt');
     if (!user) {
       console.log('[PROFILE] User not found for userId:', userId);
       return res.status(404).json({ error: 'User not found' });
+    }
+    // Generate referral code if missing
+    if (!user.referralCode) {
+      let newReferralCode;
+      do {
+        newReferralCode = crypto.randomBytes(4).toString('hex').toUpperCase();
+      } while (await User.findOne({ referralCode: newReferralCode }));
+      user.referralCode = newReferralCode;
+      await user.save();
     }
     console.log('[PROFILE] User found:', user);
     res.json(user);
