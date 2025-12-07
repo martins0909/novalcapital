@@ -43,12 +43,13 @@ const AdminDashboard: React.FC = () => {
     };
   // State declarations
   const [trackRawInvestments, setTrackRawInvestments] = useState<any>({});
-  const [activeTab, setActiveTab] = useState<'users' | 'transactions' | 'investments' | 'payments' | 'track'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'transactions' | 'investments' | 'payments' | 'track' | 'referrals'>('users');
   const [users, setUsers] = useState<any[]>([]);
   const [trackData, setTrackData] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [investments, setInvestments] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
+  const [referrals, setReferrals] = useState<any[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,6 +135,15 @@ const AdminDashboard: React.FC = () => {
       .catch(err => {
         setTrackRawInvestments({});
         console.error('[ADMIN DASHBOARD] Track users fetch error:', err);
+      });
+    } else if (activeTab === 'referrals') {
+      axios.get(`${API_BASE_URL}/api/users/admin/referrals`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+      })
+      .then(res => setReferrals(res.data))
+      .catch(err => {
+        setReferrals([]);
+        console.error('[ADMIN DASHBOARD] Referrals fetch error:', err);
       });
     }
   }, [activeTab]);
@@ -228,6 +238,12 @@ const AdminDashboard: React.FC = () => {
                 className={`px-4 py-2 font-semibold ${activeTab === 'track' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
                 onClick={() => setActiveTab('track')}
               >Track Investment</button>
+            </li>
+            <li>
+              <button
+                className={`px-4 py-2 font-semibold ${activeTab === 'referrals' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
+                onClick={() => setActiveTab('referrals')}
+              >Referral Codes</button>
             </li>
           </ul>
         </nav>
@@ -578,6 +594,31 @@ const AdminDashboard: React.FC = () => {
                         </td>
                       </tr>
                     ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        {activeTab === 'referrals' && (
+          <div className="card p-4">
+            <h2 className="text-xl font-semibold mb-2">Referral Codes</h2>
+            <div className="overflow-x-auto">
+              <table className="table w-full text-sm">
+                <thead>
+                  <tr className="bg-gray-50 text-gray-700">
+                    <th className="px-4 py-2 text-left">User</th>
+                    <th className="px-4 py-2 text-right">Users Referred</th>
+                    <th className="px-4 py-2 text-right">Referred Amount Earned</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(Array.isArray(referrals) ? referrals : []).map((row: any) => (
+                    <tr key={row.userId} className="border-b hover:bg-gray-100">
+                      <td className="px-4 py-2 align-middle font-medium text-left break-words">{row.userFullName} ({row.userEmail})</td>
+                      <td className="px-4 py-2 align-middle text-right">{row.referralsCount}</td>
+                      <td className="px-4 py-2 align-middle text-right">${row.totalEarnings.toFixed(2)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

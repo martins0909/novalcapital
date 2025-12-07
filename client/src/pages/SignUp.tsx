@@ -15,6 +15,7 @@ const SignUp = ({ setIsAuthenticated }: SignUpProps) => {
     email: '',
     password: '',
     confirmPassword: '',
+    referralCode: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -122,6 +123,7 @@ const SignUp = ({ setIsAuthenticated }: SignUpProps) => {
         email: formData.email,
         password: formData.password,
         fullName: formData.fullName,
+        referralCode: formData.referralCode || undefined,
       });
 
       // Store token and user data
@@ -192,6 +194,24 @@ const SignUp = ({ setIsAuthenticated }: SignUpProps) => {
                         placeholder="john@example.com"
                       />
                       {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
+                        Referral Code (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        id="referralCode"
+                        name="referralCode"
+                        value={formData.referralCode}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-transparent ${
+                          errors.referralCode ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter referral code"
+                      />
+                      {errors.referralCode && <p className="mt-1 text-sm text-red-500">{errors.referralCode}</p>}
                     </div>
 
                     <div>

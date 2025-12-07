@@ -88,7 +88,7 @@ const isValidPassword = (password: string): { valid: boolean; message?: string }
 // Register
 router.post('/register', async (req: Request, res: Response) => {
   try {
-    const { email, password, fullName, role } = req.body;
+    const { email, password, fullName, role, referralCode } = req.body;
 
     if (!email || !password || !fullName) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -104,12 +104,35 @@ router.post('/register', async (req: Request, res: Response) => {
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
+
+    // Generate unique referral code
+    let newReferralCode;
+    do {
+      newReferralCode = crypto.randomBytes(4).toString('hex').toUpperCase();
+    } while (await User.findOne({ referralCode: newReferralCode }));
+
+    // Handle referral
+    let referrer = null;
+    if (referralCode) {
+      referrer = await User.findOne({ referralCode });
+      if (!referrer) {
+        return res.status(400).json({ error: 'Invalid referral code' });
+      }
+      // Add $5 bonus to referrer
+      referrer.referralEarnings += 5;
+      referrer.accountBalance += 5;
+      await referrer.save();
+    }
+
     const user = await User.create({
       email,
       password,
       fullName,
-      role: role === 'admin' ? 'admin' : 'user'
+      role: role === 'admin' ? 'admin' : 'user',
+      referralCode: newReferralCode,
+      referredBy: referrer ? referrer._id : null
     });
+
     const token = jwt.sign(
       { userId: user._id.toString(), email: user.email, role: user.role },
       process.env.JWT_SECRET || 'default-secret',
@@ -122,7 +145,8 @@ router.post('/register', async (req: Request, res: Response) => {
         id: user._id,
         email: user.email,
         fullName: user.fullName,
-        role: user.role
+        role: user.role,
+        referralCode: user.referralCode
       }
     });
   } catch (error) {

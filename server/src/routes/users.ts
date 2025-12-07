@@ -101,16 +101,25 @@ router.post('/admin/:id/balance', authMiddleware, async (req: Request, res: Resp
     res.status(500).json({ error: 'Failed to update balance' });
   }
 });
-const bcrypt = require('bcryptjs');
-router.post('/admin/:id/reset-password', authMiddleware, async (req: Request, res: Response) => {
+// Admin: Get referral statistics
+router.get('/admin/referrals', authMiddleware, async (req: Request, res: Response) => {
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
-    const { id } = req.params;
-    const { newPassword } = req.body;
-    const hashed = await bcrypt.hash(newPassword, 10);
-    await User.findByIdAndUpdate(id, { password: hashed });
-    res.json({ success: true });
+    const users = await User.find({}).select('id email fullName referralEarnings');
+    const referrals = await Promise.all(users.map(async (user) => {
+      const referredCount = await User.countDocuments({ referredBy: user._id });
+      return {
+        userId: user._id,
+        userEmail: user.email,
+        userFullName: user.fullName,
+        referralsCount: referredCount,
+        totalEarnings: user.referralEarnings
+      };
+    }));
+    res.json(referrals);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to reset password' });
+    res.status(500).json({ error: 'Failed to fetch referrals' });
   }
 });
+
+export default router;
