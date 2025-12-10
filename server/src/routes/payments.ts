@@ -5,6 +5,7 @@ const User = require('../models/User');
 import multer from 'multer';
 import path from 'path';
 import { authMiddleware } from '../middleware/auth';
+import { sendNotificationEmail } from '../utils/emailService';
 
 const router = Router();
 
@@ -69,6 +70,21 @@ router.post('/user/create', authMiddleware, upload.single('receipt'), async (req
       transactionId,
       date,
     });
+
+    // Fetch user details for email
+    const user = await User.findById(userId);
+
+    // Send notification email
+    await sendNotificationEmail(
+      'New Deposit Request',
+      `<p>A new deposit request has been submitted.</p>
+       <p><strong>User:</strong> ${user ? user.fullName : 'Unknown'} (${user ? user.email : 'Unknown'})</p>
+       <p><strong>Amount:</strong> ${amount} ${currency}</p>
+       <p><strong>Method:</strong> ${method}</p>
+       <p><strong>Transaction ID:</strong> ${transactionId}</p>
+       <p><strong>Date:</strong> ${date}</p>`
+    );
+
     res.status(201).json({ message: 'Payment and transaction recorded', payment });
   } catch (err) {
     res.status(500).json({ error: 'Failed to record payment' });

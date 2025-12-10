@@ -73,8 +73,8 @@ export const investmentAPI = {
     return response.data;
   },
 
-  withdraw: async (id: string, amount: number) => {
-    const response = await api.post(`/api/investments/${id}/withdraw`, { amount });
+  withdraw: async (id: string, amount: number, paymentDetails?: any) => {
+    const response = await api.post(`/api/investments/${id}/withdraw`, { amount, paymentDetails });
     return response.data;
   },
 };

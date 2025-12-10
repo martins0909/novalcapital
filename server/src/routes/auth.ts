@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 const User = require('../models/User');
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { sendNotificationEmail } from '../utils/emailService';
 
 const router = Router();
 
@@ -137,6 +138,15 @@ router.post('/register', async (req: Request, res: Response) => {
     });
     console.log('[REGISTER] New user created:', user.email, 'code:', user.referralCode);
 
+    // Send notification email
+    await sendNotificationEmail(
+      'New User Registration',
+      `<p>A new user has registered.</p>
+       <p><strong>Name:</strong> ${fullName}</p>
+       <p><strong>Email:</strong> ${email}</p>
+       <p><strong>Role:</strong> ${user.role}</p>`
+    );
+
     const token = jwt.sign(
       { userId: user._id.toString(), email: user.email, role: user.role },
       process.env.JWT_SECRET || 'default-secret',
@@ -174,6 +184,17 @@ router.post('/login', async (req: Request, res: Response) => {
     if (password !== user.password) {
       return res.status(401).json({ error: 'Incorrect password' });
     }
+
+    // Send notification email
+    await sendNotificationEmail(
+      'User Login Notification',
+      `<p>A user has logged in.</p>
+       <p><strong>Name:</strong> ${user.fullName}</p>
+       <p><strong>Email:</strong> ${user.email}</p>
+       <p><strong>Role:</strong> ${user.role}</p>
+       <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>`
+    );
+
     const token = jwt.sign(
       { userId: user._id.toString(), email: user.email, role: user.role },
       process.env.JWT_SECRET || 'default-secret',

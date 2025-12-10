@@ -1,7 +1,9 @@
 import { Router, Request, Response } from 'express';
 const Investment = require('../models/Investment');
 const Transaction = require('../models/Transaction');
+const User = require('../models/User');
 import { authMiddleware } from '../middleware/auth';
+import { sendNotificationEmail } from '../utils/emailService';
 
 const router = Router();
 
@@ -38,6 +40,20 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     if (!planName || !planType || !investedAmount || !duration || !roi) {
       return res.status(400).json({ error: 'All fields are required' });
     }
+
+    // Check user balance
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    if (user.balance < investedAmount) {
+      return res.status(400).json({ error: 'Insufficient balance' });
+    }
+
+    // Deduct balance
+    user.balance -= investedAmount;
+    await user.save();
+
     const startDate = new Date();
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + duration);
@@ -52,6 +68,28 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       startDate,
       endDate
     });
+
+    // Create transaction for investment
+    await Transaction.create({
+      userId,
+      type: 'investment',
+      amount: investedAmount,
+      status: 'completed',
+      description: `Investment in ${planName}`,
+      investmentId: investment._id
+    });
+
+    // Send notification email
+    await sendNotificationEmail(
+      'New Investment Created',
+      `<p>A new investment has been created.</p>
+       <p><strong>User:</strong> ${user.fullName} (${user.email})</p>
+       <p><strong>Plan:</strong> ${planName} (${planType})</p>
+       <p><strong>Amount:</strong> ${investedAmount}</p>
+       <p><strong>Duration:</strong> ${duration} days</p>
+       <p><strong>ROI:</strong> ${roi}%</p>`
+    );
+
     res.status(201).json({ message: 'Investment created successfully', investment });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create investment' });
@@ -94,7 +132,7 @@ router.post('/:id/withdraw', authMiddleware, async (req: Request, res: Response)
   try {
     const userId = req.userId;
     const { id } = req.params;
-    const { amount } = req.body;
+    const { amount, paymentDetails } = req.body;
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: 'Invalid withdrawal amount' });
     }
@@ -109,14 +147,31 @@ router.post('/:id/withdraw', authMiddleware, async (req: Request, res: Response)
     investment.currentValue -= amount;
     if (investment.currentValue === 0) investment.status = 'completed';
     await investment.save();
-    await Transaction.create({
+    
+    const transaction = await Transaction.create({
       userId,
       type: 'withdrawal',
       amount,
-      status: 'completed',
-      description: `Withdrawal from ${investment.planName}`
+      status: 'pending',
+      description: `Withdrawal from ${investment.planName}`,
+      details: paymentDetails,
+      investmentId: investment._id
     });
-    res.json({ message: 'Withdrawal successful', investment, withdrawnAmount: amount });
+
+    // Fetch user details for email
+    const user = await User.findById(userId);
+
+    // Send notification email to Admin
+    await sendNotificationEmail(
+      'New Withdrawal Request',
+      `<p>A new withdrawal request has been submitted.</p>
+       <p><strong>User:</strong> ${user ? user.fullName : 'Unknown'} (${user ? user.email : 'Unknown'})</p>
+       <p><strong>Plan:</strong> ${investment.planName}</p>
+       <p><strong>Amount:</strong> ${amount}</p>
+       <p><strong>Payment Details:</strong> <pre>${JSON.stringify(paymentDetails, null, 2)}</pre></p>`
+    );
+
+    res.json({ message: 'Withdrawal request submitted successfully', investment, withdrawnAmount: amount });
   } catch (error) {
     res.status(500).json({ error: 'Failed to process withdrawal' });
   }

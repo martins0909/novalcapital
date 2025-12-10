@@ -175,15 +175,34 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
       setWithdrawError('Amount exceeds available balance');
       return;
     }
-    // Always show withdraw failed message
-    setWithdrawError('Withdraw failed, contact admin');
-    // Optionally, you can still call the API if needed
-    // try {
-    //   await investmentAPI.withdraw(selectedInvestment.id, amount);
-    //   // Handle success case if needed
-    // } catch (error: any) {
-    //   // Handle error case if needed
-    // }
+
+    let paymentDetails = {};
+    if (paymentMethod === 'bank') {
+        paymentDetails = { method: 'bank', bankAccountNumber, bankFullName, bankName, bankAddress, bankRoutingNumber, bankSwiftCode };
+    } else if (paymentMethod === 'paypal') {
+        paymentDetails = { method: 'paypal', paypalEmail };
+    } else if (paymentMethod === 'coinbase') {
+        paymentDetails = { method: 'coinbase', coinbaseAddress };
+    } else if (paymentMethod === 'card') {
+        paymentDetails = { method: 'card', cardHolderName, cardNumber, cardExpiry, cardCVV };
+    } else {
+        setWithdrawError('Select a payment method');
+        return;
+    }
+
+    try {
+      await investmentAPI.withdraw(selectedInvestment.id || selectedInvestment._id || '', amount, paymentDetails);
+      alert('Withdrawal request submitted successfully. Admin will review it shortly.');
+      setSelectedInvestment(null);
+      setWithdrawAmount('');
+      // Refresh data
+      const investmentsData = await investmentAPI.getAll();
+      setInvestments(investmentsData);
+      const transactionsData = await transactionAPI.getAll({ limit: 50 });
+      setTransactions(transactionsData);
+    } catch (error: any) {
+      setWithdrawError(error.response?.data?.error || 'Withdraw failed, contact admin');
+    }
   };
   // All logic and functions above
   return (
@@ -323,18 +342,21 @@ const Dashboard = ({ setIsAuthenticated }: DashboardProps): JSX.Element => {
                           <p className="text-gray-600 mb-2">Share your referral code to earn $5 for each successful signup!</p>
                           <div className="flex items-center gap-4">
                             <div className="flex-1">
-                              <label className="block text-sm font-medium text-gray-700 mb-1">Your Referral Code</label>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">Your Referral Link</label>
                               <div className="flex">
                                 <input
                                   type="text"
-                                  value={user?.referralCode || 'Loading...'}
+                                  value={user?.referralCode ? `${window.location.origin}/#/signup?referral=${user.referralCode}` : 'Loading...'}
                                   readOnly
                                   className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md bg-white"
                                 />
                                 <button
                                   onClick={() => {
-                                    navigator.clipboard.writeText(user?.referralCode || '');
-                                    alert('Referral code copied to clipboard!');
+                                    const link = user?.referralCode ? `${window.location.origin}/#/signup?referral=${user.referralCode}` : '';
+                                    if (link) {
+                                      navigator.clipboard.writeText(link);
+                                      alert('Referral link copied to clipboard!');
+                                    }
                                   }}
                                   className="px-4 py-2 bg-primary text-white rounded-r-md hover:bg-primary-dark"
                                 >

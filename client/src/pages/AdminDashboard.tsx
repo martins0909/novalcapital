@@ -41,6 +41,39 @@ const AdminDashboard: React.FC = () => {
       // Implement reset logic here
       setShowResetModal(false);
     };
+
+    const handleApproveTransaction = async (id: string) => {
+        try {
+            await axios.post(`${API_BASE_URL}/api/transactions/admin/${id}/approve`, {}, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+            });
+            alert('Transaction approved');
+            // Refresh transactions
+            const res = await axios.get(`${API_BASE_URL}/api/transactions/admin/all`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+            });
+            setTransactions(res.data);
+        } catch (err) {
+            alert('Failed to approve transaction');
+        }
+    };
+
+    const handleRejectTransaction = async (id: string) => {
+        try {
+            await axios.post(`${API_BASE_URL}/api/transactions/admin/${id}/reject`, {}, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+            });
+            alert('Transaction rejected');
+            // Refresh transactions
+            const res = await axios.get(`${API_BASE_URL}/api/transactions/admin/all`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
+            });
+            setTransactions(res.data);
+        } catch (err) {
+            alert('Failed to reject transaction');
+        }
+    };
+
   // State declarations
   const [trackRawInvestments, setTrackRawInvestments] = useState<any>({});
   const [activeTab, setActiveTab] = useState<'users' | 'transactions' | 'investments' | 'payments' | 'track' | 'referrals'>('users');
@@ -293,6 +326,8 @@ const AdminDashboard: React.FC = () => {
                     <th className="text-right">Amount</th>
                     <th className="text-left">Status</th>
                     <th className="text-left">Date</th>
+                    <th className="text-left">Details</th>
+                    <th className="text-left">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -303,6 +338,19 @@ const AdminDashboard: React.FC = () => {
                       <td className="text-right">${isNaN(tx.amount) ? 0 : tx.amount}</td>
                       <td className="text-left">{tx.status}</td>
                       <td className="text-left">{tx.createdAt ? new Date(tx.createdAt).toLocaleDateString() : ''}</td>
+                      <td className="text-left">
+                        {tx.details ? (
+                            <button className="btn btn-xs btn-info" onClick={() => alert(JSON.stringify(tx.details, null, 2))}>View</button>
+                        ) : '-'}
+                      </td>
+                      <td className="text-left">
+                        {tx.status === 'pending' ? (
+                            <>
+                                <button className="btn btn-xs btn-success mr-1" onClick={() => handleApproveTransaction(tx._id || tx.id)}>Approve</button>
+                                <button className="btn btn-xs btn-error" onClick={() => handleRejectTransaction(tx._id || tx.id)}>Reject</button>
+                            </>
+                        ) : '-'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

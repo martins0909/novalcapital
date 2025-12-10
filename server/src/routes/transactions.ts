@@ -1,7 +1,9 @@
 import { Router, Request, Response } from 'express';
 const Transaction = require('../models/Transaction');
 const User = require('../models/User');
+const Investment = require('../models/Investment');
 import { authMiddleware } from '../middleware/auth';
+import { sendNotificationEmail } from '../utils/emailService';
 
 const router = Router();
 
@@ -52,6 +54,23 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       status: type === 'deposit' ? 'pending' : 'completed',
       description: description || `${type.charAt(0).toUpperCase() + type.slice(1)} transaction`
     });
+
+    // Fetch user details for email
+    const user = await User.findById(userId);
+
+    // Send notification email if it's a deposit or withdrawal
+    if (type === 'deposit' || type === 'withdrawal') {
+      await sendNotificationEmail(
+        `New ${type.charAt(0).toUpperCase() + type.slice(1)} Transaction`,
+        `<p>A new ${type} transaction has been created.</p>
+         <p><strong>User:</strong> ${user ? user.fullName : 'Unknown'} (${user ? user.email : 'Unknown'})</p>
+         <p><strong>Type:</strong> ${type}</p>
+         <p><strong>Amount:</strong> ${amount}</p>
+         <p><strong>Status:</strong> ${transaction.status}</p>
+         <p><strong>Description:</strong> ${transaction.description}</p>`
+      );
+    }
+
     res.status(201).json({ message: 'Transaction created', transaction });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create transaction' });
@@ -77,7 +96,18 @@ router.post('/admin/:id/approve', authMiddleware, async (req: Request, res: Resp
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
-    const tx = await Transaction.findByIdAndUpdate(id, { status: 'approved' }, { new: true });
+    const tx = await Transaction.findByIdAndUpdate(id, { status: 'approved' }, { new: true }).populate('userId');
+
+    if (tx && tx.userId) {
+      await sendNotificationEmail(
+        'Transaction Approved',
+        `<p>Your transaction has been approved.</p>
+         <p><strong>Type:</strong> ${tx.type}</p>
+         <p><strong>Amount:</strong> ${tx.amount}</p>
+         <p><strong>Status:</strong> Approved</p>`
+      );
+    }
+
     res.json(tx);
   } catch (err) {
     res.status(500).json({ error: 'Failed to approve transaction' });
@@ -89,7 +119,30 @@ router.post('/admin/:id/reject', authMiddleware, async (req: Request, res: Respo
   if (req.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
   try {
     const { id } = req.params;
-    const tx = await Transaction.findByIdAndUpdate(id, { status: 'rejected' }, { new: true });
+    const tx = await Transaction.findByIdAndUpdate(id, { status: 'rejected' }, { new: true }).populate('userId');
+
+    // Refund if it was a withdrawal from investment
+    if (tx.type === 'withdrawal' && tx.investmentId) {
+      const investment = await Investment.findById(tx.investmentId);
+      if (investment) {
+        investment.currentValue += tx.amount;
+        if (investment.status === 'completed' && investment.currentValue > 0) {
+          investment.status = 'active';
+        }
+        await investment.save();
+      }
+    }
+
+    if (tx && tx.userId) {
+      await sendNotificationEmail(
+        'Transaction Rejected',
+        `<p>Your transaction has been rejected.</p>
+         <p><strong>Type:</strong> ${tx.type}</p>
+         <p><strong>Amount:</strong> ${tx.amount}</p>
+         <p><strong>Status:</strong> Rejected</p>`
+      );
+    }
+
     res.json(tx);
   } catch (err) {
     res.status(500).json({ error: 'Failed to reject transaction' });

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { authAPI } from '../services/api';
@@ -10,6 +10,7 @@ interface SignUpProps {
 
 const SignUp = ({ setIsAuthenticated }: SignUpProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -17,6 +18,15 @@ const SignUp = ({ setIsAuthenticated }: SignUpProps) => {
     confirmPassword: '',
     referralCode: '',
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const referral = params.get('referral');
+    if (referral) {
+      setFormData(prev => ({ ...prev, referralCode: referral }));
+    }
+  }, [location]);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
